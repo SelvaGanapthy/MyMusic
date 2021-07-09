@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.trickyandroid.playmusic.viewmodel.SongPlayerViewModel" />
+    </data>
+
+<RelativeLayout
+    android:id="@+id/layoutSongPlayerActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/music_bg"
+    android:orientation="vertical"
+    tools:context=".view.activitys.SongPlayerActivity">
+
+    <LinearLayout
+        android:id="@+id/l1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/cover_bg"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imvGoBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:onClick="@{(v)->viewModel.onClick(v)}"
+                    app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
+
+
+                <TextView
+                    android:id="@+id/tvSongName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1"
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:gravity="center"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="UnKnown"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp"
+                    tools:ignore="EllipsizeMaxLines" />
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize">
+
+
+                </androidx.appcompat.widget.Toolbar>
+
+
+<!--                <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginRight="5dp"-->
+<!--                android:gravity="end"-->
+<!--                android:onClick="showPopMenu"-->
+<!--                android:src="@drawable/ic_menu_overflow_white"/>-->
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/imvSongImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:onClick="@{(v)->viewModel.onClick(v)}"
+                    android:src="@drawable/default_album_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/musicsymbol"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imvSnapShot"
+                        android:layout_width="40dp"
+                        android:layout_height="28dp"
+                        android:onClick="@{(v)->viewModel.onClick(v)}"
+                        app:srcCompat="@drawable/ic_add_a_photo_white_24dp" />
+
+                    <ImageView
+                        android:id="@+id/imvEqualizer"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:onClick="@{(v)->viewModel.onClick(v)}"
+                        app:srcCompat="@drawable/ic_equalizer_black_24dp" />
+
+                    <ImageView
+                        android:id="@+id/imvVolume"
+                        android:layout_width="40dp"
+                        android:layout_height="28dp"
+                        android:onClick="@{(v)->viewModel.onClick(v)}"
+                        app:srcCompat="@drawable/ic_volume_up_black_24dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvMovieName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="unKnown"
+                    android:textColor="#FFF"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="2"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvCurrentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="13dp"
+                    android:text="0:00"
+                    android:textColor="#ffffff"
+                    android:textSize="17dp" />
+
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/songSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+
+                <TextView
+                    android:id="@+id/tvTotalTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="20dp"
+                    android:text="0:00"
+                    android:textColor="#ffffff"
+                    android:textSize="17dp" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imvShuffle"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:onClick="@{(v)->viewModel.onClick(v)}"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_shuffle_white_24dp" />
+
+                <ImageView
+                    android:id="@+id/imvBackward"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:onClick="@{(v)->viewModel.onClick(v)}"
+                    android:background="@drawable/circle_ripple_effect"
+                    android:padding="1dp"
+                    app:srcCompat="@drawable/ic_skip_previous_white_24dp" />
+
+                <ImageView
+                    android:id="@+id/imvPlayrPause"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:onClick="@{(v)->viewModel.onClick(v)}"
+                    android:layout_weight="1"
+                    android:visibility="gone" />
+                <!--android:src="@drawable/ic_pause_circle_filled_white_24dp"-->
+
+                <com.trickyandroid.playmusic.utils.PlayPauseView
+                    android:id="@+id/fabPlaynPause"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:clickable="true"
+                    android:onClick="@{(v)->viewModel.onClick(v)}"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/imvForward"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:onClick="@{(v)->viewModel.onClick(v)}"
+                    android:layout_weight="1"
+                    android:background="@drawable/circle_ripple_effect"
+                    android:padding="1dp"
+                    app:srcCompat="@drawable/ic_skip_next_white_24dp" />
+
+                <ImageView
+                    android:id="@+id/imvRepeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:onClick="@{(v)->viewModel.onClick(v)}"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_repeat_white_24dp" />
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_weight="2"
+                android:orientation="vertical" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSongArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:fontFamily="serif"
+                android:singleLine="true"
+                android:text="Unknown"
+                android:textColor="#FFF"
+                android:textSize="16dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSongYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="serif"
+                android:text="1989"
+                android:textColor="#FFF"
+                android:textSize="16dp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
+
+</layout>

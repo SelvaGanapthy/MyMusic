@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/music_bg1"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <!--        <include-->
+        <!--            android:id="@+id/timeout_layout"-->
+        <!--            layout="@layout/connection_timeout"-->
+        <!--            android:visibility="gone" />-->
+
+        <ImageView
+            android:id="@+id/drawer_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:padding="12.00dp"
+            android:layout_marginLeft="13.00dp"
+            android:layout_marginStart="3.00dp"
+            android:layout_gravity="center_vertical"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="15.00dp"
+            android:layout_marginLeft="5.00dp">
+
+
+            <EditText
+                android:id="@+id/reg_search_editText"
+                android:layout_width="match_parent"
+                android:layout_height="35.00dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5.00dp"
+                android:layout_marginBottom="5.00dp"
+                android:layout_marginLeft="8.00dp"
+                android:layout_marginStart="8.00dp"
+                android:background="#ffffff"
+                android:ems="10"
+                android:inputType="text"
+                android:lines="1"
+                android:textColor="#000000"
+                android:textColorHint="#554444" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8.00dp"
+            android:background="#005544" />
+
+        <!--        android:background="@drawable/line_gradient" />-->
+        <ListView
+            android:id="@+id/reg_listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="#e5e5e5"
+            android:scrollbars="none"
+            android:dividerHeight="0.6dp"/>
+
+    </LinearLayout>
+</FrameLayout>

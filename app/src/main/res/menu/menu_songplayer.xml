@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/popUpMenu"
+          android:icon="@drawable/ic_menu_overflow_white"
+          android:title=""
+          app:showAsAction="always">
+
+        <menu>
+
+            <item
+                    android:id="@+id/menuSetRingtone"
+                    android:icon="@drawable/ic_phone_black_24dp"
+                    android:title="Set Ringtone"/>
+
+            <item
+                    android:id="@+id/menuSongShare"
+                    android:icon="@drawable/ic_share_white_24dp"
+                    android:title="Song Share"/>
+
+            <item
+                    android:id="@+id/menuSongRecord"
+                    android:icon="@drawable/ic_mic_none_black_24dp"
+                    android:title="Song Record"/>
+
+        </menu>
+    </item>
+</menu>

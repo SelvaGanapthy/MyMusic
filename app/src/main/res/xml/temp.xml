@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="utf-8"?>
+<radio xmlId="1293" genreId="6933" count="110">
+
+    <channel id="31082" title="A9 Radio HQ" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://1.bp.blogspot.com/-63oRc1qdC_E/UtCBa1QTrwI/AAAAAAAADIM/RmUclaDPRNE/s300/Title-Logo.png</image>
+        <url bitrate="128">http://195.154.217.103:8175</url>
+    </channel>
+
+    <channel id="42633" title="A9 Radio MQ" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://1.bp.blogspot.com/-63oRc1qdC_E/UtCBa1QTrwI/AAAAAAAADIM/RmUclaDPRNE/s300/Title-Logo.png</image>
+        <url bitrate="128">http://listen.radionomy.com/A9RADIO</url>
+    </channel>
+
+    <channel id="35346" title="ABC Tamil" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="64">http://38.107.243.220:8118</url>
+    </channel>
+    <channel id="47571" title="Abinayam FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.abinayamfm.com/images/logo.png</image>
+        <url bitrate="64">http://192.99.170.8:5756</url>
+    </channel>
+
+    <channel id="47534" title="Adventist Tamil Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://195.154.217.103:8004/;stream.mp3</url>
+    </channel>
+
+    <channel id="47860" title="AIR FM Tamil" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://allindiaradio.gov.in/_layouts/AIR/Images/ListenLive/Tamil.png</image>
+        <url bitrate="32">http://airtamil-lh.akamaihd.net/i/airtamil_1@507817/master.m3u8</url>
+    </channel>
+    <channel id="47371" title="AR Stream" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="64">http://streaming.radionomy.com/AR-Stream-new</url>
+    </channel>
+    <channel id="47359" title="Chellam FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="64">http://5.63.145.172:7124</url>
+    </channel>
+    <channel id="47021" title="Chennai FM Rainbow 101.4" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://cdn-radiotime-logos.tunein.com/s111115q.png</image>
+        <url bitrate="40">http://164.132.63.75:9998</url>
+    </channel>
+    <channel id="47738" title="Cmr Tamil" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://cmr24.net/wp-content/themes/cmr/images/logo.png</image>
+        <url bitrate="128">http://live.cmr24.net:8081/CMR/TamilHD-MQ/icecast.audio</url>
+    </channel>
+    <channel id="4292" title="CTBC Radio" location="Internet Only">
+        <category>Various;</category>
+        <image>http://ctbc.com/wp-content/themes/asitemplate/images/logo.png</image>
+        <url bitrate="64">http://38.96.148.253:4086/;stream.mp3</url>
+    </channel>
+    <channel id="47361" title="DJ Siran Tamil HQ" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://i.radionomy.com/documents/radio/1ba87c098fea455caa9481ad25993969_635111553748960680.72x72.png
+        </image>
+        <url bitrate="128">http://streaming.radionomy.com/DJSiran-Tamil-FM</url>
+    </channel>
+    <channel id="46949" title="DJ Siran Tamil MQ" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://i.radionomy.com/documents/radio/1ba87c098fea455caa9481ad25993969_635111553748960680.72x72.png
+        </image>
+        <url bitrate="64">http://listen.radionomy.com/djsiran-tamil-fm</url>
+    </channel>
+    <channel id="47588" title="ETR FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.etr.fm/img_etr/logos/logo.fw.png</image>
+        <url bitrate="128">http://91.121.78.191:8012/stream</url>
+    </channel>
+    <channel id="47589" title="ETR Music" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://music.etr.fm/music_img/header/01.jpg</image>
+        <url bitrate="128">http://212.83.150.15:8304/stream</url>
+    </channel>
+    <channel id="45216" title="European Tamil Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.etr.fm/img_etr/logos/logo.fw.png</image>
+        <url bitrate="64">http://mobile.etr.audio:8297/stream</url>
+    </channel>
+    <channel id="34716" title="Faith Fm Tamil" location="Internet Only">
+        <category>Gospel;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://faithfm.net:9000</url>
+    </channel>
+    <channel id="26323" title="FCM Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.faithchurchministries.co.uk/wp-content/uploads/2015/02/fcm-weblogo.png</image>
+        <url bitrate="128">http://192.184.9.81:8374</url>
+    </channel>
+    <channel id="31764" title="FM Kondattam AAC" location="Internet Only">
+        <category>Gospel;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="64">http://audiocp.globaliway.co.in:7684</url>
+    </channel>
+    <channel id="7696" title="Friends Tamil Chat" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.friendstamilchat.com/images/ftcfm.png</image>
+        <url bitrate="128">http://167.114.131.90:5750</url>
+    </channel>
+    <channel id="47120" title="Geetham 80s Radio - 128Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="128">http://www.geethamradio.com:8020/80s_hifi.mp3</url>
+    </channel>
+    <channel id="47121" title="Geetham 80s Radio - 24Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="24">http://www.geethamradio.com:8020/80s_lofi.mp3</url>
+    </channel>
+    <channel id="47124" title="Geetham New Radio - 128Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="128">http://www.geethamradio.com:8020/new_hifi.mp3</url>
+    </channel>
+    <channel id="47125" title="Geetham New Radio - 24Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="24">http://www.geethamradio.com:8020/new_lofi.mp3</url>
+    </channel>
+    <channel id="47126" title="Geetham Old Radio - 128Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="128">http://www.geethamradio.com:8020/old_hifi.mp3</url>
+    </channel>
+    <channel id="47127" title="Geetham Old Radio - 24Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="24">http://www.geethamradio.com:8020/old_lofi.mp3</url>
+    </channel>
+    <channel id="47128" title="Geetham Party Radio - 128Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="128">http://www.geethamradio.com:8020/party_hifi.mp3</url>
+    </channel>
+    <channel id="47129" title="Geetham Party Radio - 24Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="24">http://www.geethamradio.com:8020/party_lofi.mp3</url>
+    </channel>
+    <channel id="47122" title="Geetham Request Radio - 128Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="128">http://www.geethamradio.com:8020/hifi.mp3</url>
+    </channel>
+    <channel id="47123" title="Geetham Request Radio - 24Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s113467t.png</image>
+        <url bitrate="24">http://www.geethamradio.com:8020/lofi.mp3</url>
+    </channel>
+    <channel id="47528" title="Gethsemane FM" location="Internet Only">
+        <category>Gospel;Tamil;</category>
+        <image>http://gethsemanefm.com/images/logo.png</image>
+        <url bitrate="64">http://38.107.242.241:8004/</url>
+    </channel>
+    <channel id="32403" title="Gokulam Tamil Radio HQ" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.gtr.fm/images/ico/gtrLogo25.png</image>
+        <url bitrate="96">http://94.23.62.189:5250</url>
+    </channel>
+    <channel id="26088" title="Gokulam Tamil Radio MQ" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.gtr.fm/images/ico/gtrLogo25.png</image>
+        <url bitrate="64">http://94.23.62.189:5040</url>
+    </channel>
+    <channel id="42224" title="GTBC FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://gtbc.fm/wp-content/themes/wt_metro/images/logo.png</image>
+        <url bitrate="128">http://38.96.148.18:6150</url>
+    </channel>
+    <channel id="47567" title="Hariharan Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://listen.radionomy.com/HARIHARAN-UNNIKRISHNANHITS</url>
+    </channel>
+    <channel id="41529" title="IBC Tamil LQ" location="Internet Only">
+        <category>classical;</category>
+        <image>http://cdn-radiotime-logos.tunein.com/s55338q.png</image>
+        <url bitrate="24">http://38.96.148.226:7248</url>
+    </channel>
+    <channel id="45067" title="IBC Tamil MQ" location="Internet Only">
+        <category>classical;</category>
+        <image>https://ibctamil.com/images/logo.png</image>
+        <url bitrate="96">http://38.96.148.226:6176</url>
+    </channel>
+    <channel id="17499" title="Ilamai fM" location="Internet Only">
+        <category>Assorted;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="96">http://s8.voscast.com:7404</url>
+    </channel>
+    <channel id="47118" title="Ilayamaan Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/ilayamaan-radio.jpg</image>
+        <url bitrate="128">http://listen.radionomy.com/ilmstream</url>
+    </channel>
+    <channel id="47117" title="Ilayamagan Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/ilayamagan-radio.jpg</image>
+        <url bitrate="128">http://listen.radionomy.com/iryuvistream</url>
+    </channel>
+    <channel id="47116" title="Ilayaraja Lite Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/ilayaraja-lite-radio.jpg</image>
+        <url bitrate="64">http://listen.radionomy.com/litestreaming</url>
+    </channel>
+
+    <channel id="9963" title="Ilayaraja Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/ilayaraja-radio.jpg</image>
+        <url bitrate="128">http://listen.radionomy.com/ir2ir2irrdo</url>
+    </channel>
+
+    <channel id="46950" title="ILC Tamil" location="Internet Only">
+        <category/>
+        <image>http://tamilmurasam.com/wordpress/wp-content/uploads/2015/11/logo_main_4x1.png</image>
+        <url bitrate="64">http://www.tamilmurasam.com/assets/audio/sun.mp3</url>
+    </channel>
+
+    <channel id="47365" title="Illayarajavin Thevitatha Padalgal" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="96">http://streaming.radionomy.com/IllayarajavinThevitathaPadalgal-</url>
+    </channel>
+
+    <channel id="47523" title="Irai Isai Tamil Christian Radio" location="Internet Only">
+        <category>Christian;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://janus.shoutca.st:9366/stream</url>
+    </channel>
+
+    <channel id="47132" title="ITR Tamil Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s100623t.png</image>
+        <url bitrate="128">http://streams.museter.com:9033</url>
+    </channel>
+
+    <channel id="47535" title="Jaffna Tamil Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.jtrfm.de/images/banner.png</image>
+        <url bitrate="128">http://jtrfm.ddnss.de:8000</url>
+    </channel>
+
+    <channel id="8273" title="JEI Tamil FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s165583t.png</image>
+        <url bitrate="128">http://usa3.fastcast4u.com:8808</url>
+    </channel>
+
+    <channel id="14269" title="Jesus fm" location="Internet Only">
+        <category>Unspecified;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="64">http://50.7.70.66:8575</url>
+    </channel>
+
+    <channel id="39632" title="Kalasam FM HQ" location="Internet Only">
+        <category>Tamil;kalasam;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://173.192.207.51:8084</url>
+    </channel>
+
+    <channel id="38471" title="Lankasri FM HQ" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s123492q.png</image>
+        <url bitrate="128">http://media2.lankasri.fm/;stream/1</url>
+    </channel>
+
+    <channel id="47367" title="Lankasri FM LQ" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s123492q.png</image>
+        <url bitrate="32">http://46.105.43.114:8000/live</url>
+    </channel>
+
+    <channel id="47488" title="Live From Norway" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.tamilaruvifm.com/img/logo.png</image>
+        <url bitrate="64">http://66.90.103.189:8852</url>
+    </channel>
+
+    <channel id="47709" title="Live Toronto Tamil Gospel Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://radio.rvrdvt.com/wp-content/uploads/2015/10/logo-100.png</image>
+        <url bitrate="96">http://ice7.securenetsystems.net/AMENFM</url>
+    </channel>
+
+    <channel id="47266" title="Luminous Tamil Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://cdn-radiotime-logos.tunein.com/s220613q.png</image>
+        <url bitrate="128">http://192.111.140.6:8602/stream</url>
+    </channel>
+
+    <channel id="47591" title="MTR HD" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://192.184.9.158:8860/;stream.mp3</url>
+    </channel>
+
+    <channel id="47586" title="Mukil FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://mukilapp.com/mukil/img/basic/Mukil_We_logo_001.png</image>
+        <url bitrate="64">http://streaming.shoutcast.com/MUKILFMRADIO</url>
+    </channel>
+
+    <channel id="47711" title="NJC Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>
+            https://static.wixstatic.com/media/dc7c24_cc596f061ed940db83d7c067862e628b.png/v1/fill/w_88,h_88,al_c,usm_0.50_1.20_0.00/dc7c24_cc596f061ed940db83d7c067862e628b.png
+        </image>
+        <url bitrate="128">http://91.196.49.252:18150/;stream.mp3</url>
+    </channel>
+
+    <channel id="47344" title="Oli 96.8 FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s17453t.png</image>
+        <url bitrate="48">http://mediacorp.rastream.com/968fm</url>
+    </channel>
+
+    <channel id="3526" title="Paris Tamil FM" location="Internet Only">
+        <category>Assorted;</category>
+        <image>http://www.paristamil.com/layout_images/index/logo.png</image>
+        <url bitrate="128">http://198.178.123.17:7108</url>
+    </channel>
+
+    <channel id="5345" title="Puradsi Isaiyaruvi FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>
+            http://2.bp.blogspot.com/-D8x1ex636p8/WHIKwOX1uzI/AAAAAAAAEuo/IpeJgffJ_sMt8HShk23wZitTueAR88A7ACK4B/s0/Puradsi%2BNew%2BLogo.jpg
+        </image>
+        <url bitrate="96">http://puradsifm.net:9994</url>
+    </channel>
+
+    <channel id="47115" title="Puthu Paadal Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/puthu-paadal-radio.jpg</image>
+        <url bitrate="128">http://listen.radionomy.com/puthu-paadal-radio</url>
+    </channel>
+
+    <channel id="25674" title="Quran in Tamil" location="Internet Only">
+        <category>Quran;</category>
+        <image>http://www.onlinelearningquran.co/images/quran.png</image>
+        <url bitrate="128">http://quraan.us:9956</url>
+    </channel>
+
+    <channel id="12287" title="Radio City Tamil" location="Internet Only">
+        <category>World;</category>
+        <image>http://scratchu.com/radio/images/6788.png</image>
+        <url bitrate="96">http://prclive1.listenon.in:9948</url>
+    </channel>
+
+    <channel id="47400" title="Radio Souparnika" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://p3.radiocdn.com/files/images/albumart/17641-400dpiLogo.png</image>
+        <url bitrate="128">http://158.69.225.238:5266/Live</url>
+    </channel>
+
+    <channel id="46374" title="Radiospathy Tamil online Radio" location="Internet Only">
+        <category>Unspecified;Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s151626t.png</image>
+        <url bitrate="64">http://82.145.43.92:8378</url>
+    </channel>
+
+    <channel id="14866" title="Red FM Sri Lanka" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://shaincast.caster.fm:47830/listen.mp3</url>
+    </channel>
+
+    <channel id="47374" title="Rosary FM" location="Internet Only">
+        <category>Tamil;Chrisitian;</category>
+        <image>http://www.mygreatmaster.com/wp-content/uploads/2014/10/mygreatmaster-header-nov2015.jpg</image>
+        <url bitrate="24">http://174.36.206.197:8068</url>
+    </channel>
+
+    <channel id="47531" title="SA Tamil Radio" location="Internet Only">
+        <category>Pop;Tamil;</category>
+        <image>http://cdn-radiotime-logos.tunein.com/s252665q.png</image>
+        <url bitrate="64">http://109.169.26.216:8004/;stream.mp3</url>
+    </channel>
+
+    <channel id="38425" title="Shaivam Radio" location="Internet Only">
+        <category>Spiritual;Hindu;Shiva;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s156643t.png</image>
+        <url bitrate="96">http://50.22.212.203:8007</url>
+    </channel>
+
+    <channel id="47040" title="Shakthi FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://shakthifm.com/wp-content/uploads/2015/08/logo.png</image>
+        <url bitrate="84">http://76.164.217.100:7012</url>
+    </channel>
+
+    <channel id="47375" title="Siruthai FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="64">http://eu3.fastcast4u.com:5074</url>
+    </channel>
+
+    <channel id="47114" title="SPB Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/spb-radio.jpg</image>
+        <url bitrate="128">http://listen.radionomy.com/spstreamlink</url>
+    </channel>
+
+    <channel id="47779" title="Star FM Lanka" location="Internet Only">
+        <category>Tamil;</category>
+        <image>
+            http://3.bp.blogspot.com/-bLHQuFNaYLM/VysaaMHJeVI/AAAAAAAAA-Q/7E0Q8fKcq1Q7d4w1pygYXDFWdqcKHQ1mwCK4B/s1600/starfmredlogo.png
+        </image>
+        <url bitrate="32">http://s1.voscast.com:8734/;stream1496109162097/1</url>
+    </channel>
+
+    <channel id="47712" title="Super Hits Tamil" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://listen.radionomy.com/SuperHitsTamil</url>
+    </channel>
+
+    <channel id="46952" title="Swagger Beat" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://5.135.154.91:4376</url>
+    </channel>
+
+    <channel id="47739" title="Swastik Tamil Bhajan Geetham" location="Internet Only">
+        <category>Tamil;Bhajan;asia;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://listen.radionomy.com/SwastikTamilBhajanGeetham</url>
+    </channel>
+
+    <channel id="47710" title="Sweety FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.sweetyfm.com/gallery/sweety%20fm%20fina222l.jpg</image>
+        <url bitrate="64">http://66.55.145.43:7329/stream2</url>
+    </channel>
+
+    <channel id="47376" title="Tambura Tamil Comedy" location="Internet Only">
+        <category>Tamil;</category>
+        <image>https://i.radionomy.com/document/radios/3/33b5/33b5ca1e-6c2e-47dd-a129-5a85b69dea2c.s67.png</image>
+        <url bitrate="128">http://listen.radionomy.com/TamburaRadioTamilComedy</url>
+    </channel>
+
+    <channel id="47111" title="Tamil - A. R. Rahman" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/a.r.rahman-radio.jpg</image>
+        <url bitrate="128">http://listen.radionomy.com/arrahman-radio</url>
+    </channel>
+
+    <channel id="43680" title="Tamil 2 FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="48">http://s8.voscast.com:7674</url>
+    </channel>
+
+    <channel id="47490" title="Tamil Arkural Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://146.185.18.251:8088/;stream.mp3</url>
+    </channel>
+
+    <channel id="47110" title="Tamil Aruvi Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s106735t.png</image>
+        <url bitrate="48">http://198.178.123.23:8430/;stream.mp3</url>
+    </channel>
+
+    <channel id="47112" title="Tamil Beat Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/tamil-beat-radio.jpg</image>
+        <url bitrate="128">http://listen.radionomy.com/tbstream</url>
+    </channel>
+
+    <channel id="47524" title="Tamil Esai Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://isaithenral.com/images/logo.png</image>
+        <url bitrate="48">http://50.22.212.195:8050/;stream.mp3</url>
+    </channel>
+
+    <channel id="13505" title="Tamil Flash FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://cdn-radiotime-logos.tunein.com/s78128q.png</image>
+        <url bitrate="128">http://stream.zenolive.com/0gtb83gvwa5tv</url>
+    </channel>
+
+    <channel id="47843" title="Tamil FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="160">http://31.14.40.149:8000</url>
+    </channel>
+
+    <channel id="26159" title="Tamil Isai" location="Internet Only">
+        <category>Unspecified;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="64">http://162.252.85.85:7150/;stream.mp3</url>
+    </channel>
+
+    <channel id="39864" title="Tamil Kuyil FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.tamilkuyilradio.com/main/web/images/tamilkuyil_radio_logo.png</image>
+        <url bitrate="128">http://live.tamilkuyilradio.com:8095</url>
+    </channel>
+
+    <channel id="47083" title="Tamil Olli Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s110752t.png</image>
+        <url bitrate="128">http://94.23.36.180:5006/;stream.mp3</url>
+    </channel>
+
+    <channel id="46954" title="Tamil Radio Bonn Germany" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://78.46.251.203:8000</url>
+    </channel>
+
+    <channel id="47378" title="Tamil Star Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>
+            https://3.bp.blogspot.com/-6MEHlS8zCEc/WAVjM0QgtMI/AAAAAAAABJc/s84A77x8oGgx4qpbReOHIvgtIhP6T6L6ACK4B/s1600/starfm-dd.png
+        </image>
+        <url bitrate="48">http://198.178.123.2:8734</url>
+    </channel>
+
+    <channel id="16774" title="Tamil Sun FM 128Kbps" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s138053t.png</image>
+        <url bitrate="128">http://192.99.4.210:3596</url>
+    </channel>
+
+    <channel id="11857" title="Tamil Talk Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>https://i.radionomy.com/document/radios/c/c3e7/c3e714a9-69a4-49fb-91c1-735c259314ba.s400.png</image>
+        <url bitrate="128">http://listen.radionomy.com/TAMILTALKRADIO</url>
+    </channel>
+
+    <channel id="6216" title="Tamil Zion Radio" location="Internet Only">
+        <category>JESUS;Religion;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="56">http://uk1-pn.webcast-server.net:8376</url>
+    </channel>
+
+    <channel id="47536" title="Tamilithal" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://tamilithal.com/wp-content/uploads/2016/09/Logo.png</image>
+        <url bitrate="128">http://109.169.26.139:8156/stream</url>
+    </channel>
+
+    <channel id="47731" title="TamilOne Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.tamilone.ch/img/logo.png</image>
+        <url bitrate="128">http://www.tamilone.ch:8000/stream_128</url>
+    </channel>
+
+    <channel id="46956" title="Thamil Eelathil Irunthu Pulikalinkural" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://sc10.streamingpulse.tv:8090</url>
+    </channel>
+
+    <channel id="47594" title="Thayagam Tamil Oli" location="Internet Only">
+        <category>Folk;</category>
+        <image>http://thayagam.net/images/logo.png</image>
+        <url bitrate="128">http://46.28.53.118:7045/stream</url>
+    </channel>
+
+    <channel id="37975" title="Thenral World Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.radio.thenralworld.org/images/logo/logo.jpg</image>
+        <url bitrate="64">http://37.187.79.93:9116/stream</url>
+    </channel>
+
+    <channel id="47380" title="Theophony FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://theophony.org/imgs/common/logo.png</image>
+        <url bitrate="64">http://66.55.145.43:7254/live</url>
+    </channel>
+
+    <channel id="47881" title="Theri FM" location="Internet Only">
+        <category>Misc;</category>
+        <image>http://cdn-radiotime-logos.tunein.com/s291311q.png</image>
+        <url bitrate="96">http://192.95.18.39:5444</url>
+    </channel>
+
+    <channel id="47740" title="Ullasam FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.relaxarena.com/wp-content/themes/relaxnew/images/logo-fm.png</image>
+        <url bitrate="96">http://192.99.8.192:2792/ULLasam-FM</url>
+    </channel>
+
+    <channel id="47527" title="Umachi FM" location="Internet Only">
+        <category>Pop;Tamil;</category>
+        <image>http://umachifm.in4net.com/wp-content/uploads/sites/18/2017/01/6943126_180.png</image>
+        <url bitrate="96">https://streaming.shoutcast.com/UMACHIFM</url>
+    </channel>
+
+    <channel id="47706" title="US Tamil FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://www.ustamilfm.com/images/logo.png</image>
+        <url bitrate="64">http://192.184.9.158:8329/;stream.mp3</url>
+    </channel>
+
+    <channel id="14378" title="Vanavil FM HD" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://vanavilfm.com/assets/img/basic/logo.png</image>
+        <url bitrate="128">http://s2.vanavilfm.com:9000</url>
+    </channel>
+
+    <channel id="9302" title="Varnam FM" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://d1i6vahw24eb07.cloudfront.net/s100497t.png</image>
+        <url bitrate="64">http://s3.voscast.com:8402</url>
+    </channel>
+
+    <channel id="19570" title="Waves of Power" location="Internet Only">
+        <category>Gospel;Worship;Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://s2.viastreaming.net:6335</url>
+    </channel>
+
+    <channel id="47590" title="Yarl FM Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://scratchu.com/radio/images/default.png</image>
+        <url bitrate="128">http://198.178.123.23:8314/;stream.mp3</url>
+    </channel>
+
+    <channel id="47113" title="YSR Radio" location="Internet Only">
+        <category>Tamil;</category>
+        <image>http://southradios.com/images/yuvan-shankar-raja-radio.jpg</image>
+        <url bitrate="128">http://listen.radionomy.com/yuvan-shankar-raja-radio</url>
+    </channel>
+
+</radio>

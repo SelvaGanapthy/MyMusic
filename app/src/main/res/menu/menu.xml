@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+            android:id="@+id/menuActionBar"
+            android:title=""
+            android:icon="@drawable/ic_menu_overflow_white"
+            app:showAsAction="always">
+
+        <menu>
+            <item
+                    android:id="@+id/menuFmRadio"
+                    android:title="Fm Radio"
+                    android:icon="@drawable/ic_radio_black_24dp"
+                    app:showAsAction="ifRoom"
+            />
+
+
+            <item
+                    android:id="@+id/menuAppShare"
+                    android:title="App Share"
+                    android:icon="@drawable/ic_share_white_24dp"
+                    app:showAsAction="ifRoom"
+            />
+        </menu>
+    </item>
+
+</menu>

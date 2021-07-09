@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools" android:id="@+id/linearAlertSnapshot"
+                android:layout_width="match_parent"
+                android:layout_height="435dp"
+                android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:background="@drawable/cover_bg"
+            android:orientation="vertical">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/card_bg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+
+            <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/ic_launcher_music"/>
+
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:fontFamily="serif"
+                    android:gravity="center_vertical"
+                    android:text="Play Music"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"/>
+        </LinearLayout>
+
+
+        <ImageView
+                android:id="@+id/imvSongImage"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_album_bg"/>
+
+
+        <TextView
+                android:id="@+id/tvMovieName"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="Unknown"
+                android:textColor="#FFF"
+                android:textSize="18sp"/>
+
+
+        <TextView
+                android:id="@+id/tvSongName"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="Unknown"
+                android:textColor="#FFF"
+                android:textSize="18sp"/>
+
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_marginTop="10dp"
+                android:background="#FFF"/>
+
+        <LinearLayout
+                android:id="@+id/linearScreenShotShareorCancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:orientation="horizontal">
+
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cvCancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="18dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:foreground="@drawable/ripple_effects">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/cover_bg"
+                        android:gravity="center"
+                        android:text="CANCEL"
+                        android:textColor="@color/colorOrange"
+                        android:textSize="18sp"/>
+            </androidx.cardview.widget.CardView>
+
+            <!--<View-->
+            <!--android:layout_width="2dp"-->
+            <!--android:layout_height="40dp" />-->
+
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/cvShare"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="18dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:foreground="@drawable/ripple_effects">
+
+                <TextView
+                        android:id="@+id/tvShare"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/cover_bg"
+                        android:gravity="center"
+                        android:text="SHARE"
+                        android:textColor="@color/colorOrange"
+                        android:textSize="18sp"/>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

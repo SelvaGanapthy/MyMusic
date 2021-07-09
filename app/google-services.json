@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "80540461884",
+    "firebase_url": "https://sample-5ad10.firebaseio.com",
+    "project_id": "sample-5ad10",
+    "storage_bucket": "sample-5ad10.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80540461884:android:7a34548b5ab5cb4d",
+        "android_client_info": {
+          "package_name": "com.trickyandroid.playmusic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "80540461884-a14po3638b3lsiuh5rk5jfa0kp9ndboa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trickyandroid.playmusic",
+            "certificate_hash": "934baca9609af7f52214fe25bcbb1a4c26df4871"
+          }
+        },
+        {
+          "client_id": "80540461884-m25fn173kf1uuv7707orli2ob8aqgvlk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgQnHaD4HVucz__rPKGB4thOVuYEcAKig"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "80540461884-m25fn173kf1uuv7707orli2ob8aqgvlk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

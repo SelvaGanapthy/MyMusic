@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:orientation="vertical">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_weight="1">
+
+            <ImageView
+                    android:id="@+id/imvFmImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:scaleType="fitXY"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/default_album_bg"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+            <TextView
+                    android:id="@+id/tvRadioName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="unKnown"
+                    android:fontFamily="serif"
+                    android:textColor="#FFF"
+                    android:textSize="14sp"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="2"
+                android:gravity="center_vertical">
+
+
+            <SeekBar
+                    android:id="@+id/fmSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+            <!--<be.rijckaert.tim.animatedvector.FloatingMusicActionButton-->
+            <!--android:id="@+id/fmPlayrPause"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="68dp"-->
+            <!--android:layout_gravity="center"/>-->
+
+
+            <Button
+                    android:id="@+id/buttonPlay"
+                    android:layout_width="104dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@drawable/rounded_corner_button"
+                    android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
+                    android:padding="5.0dp"
+                    android:layout_height="40dp"
+                    android:textColor="#FFFFFF"
+                    android:text="PLaying"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+            <TextView
+                    android:id="@+id/tvRadioSite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|bottom"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="10dp"
+                    android:text="SouthRadio.com"
+                    android:fontFamily="serif"
+                    android:textColor="#FFF"
+                    android:textSize="16dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+

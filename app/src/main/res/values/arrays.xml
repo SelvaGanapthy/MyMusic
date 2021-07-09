@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="images">
+        <item>@drawable/cordinator_layoutbg1</item>
+        <item>@drawable/cordinator_layoutbg2</item>
+    </array>
+
+    <array name="fmimages">
+        <item>@drawable/radiocity</item>
+        <item>@drawable/radiovanam</item>
+        <item>@drawable/arrahman</item>
+        <item>@drawable/harrisjayaraj</item>
+        <item>@drawable/oldsong</item>
+    </array>
+
+
+</resources>
