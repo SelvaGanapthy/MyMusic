@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.trickyandroid.playmusic.R
+import com.trickyandroid.playmusic.app.AppController
 import com.trickyandroid.playmusic.models.SongInfoModel
 import com.trickyandroid.playmusic.utils.CommonUtilities
 import com.trickyandroid.playmusic.view.adapters.Common_Registration_Adapter
@@ -30,7 +31,6 @@ class CommonSearchFragment : Fragment() {
     private var drawer_close: ImageView? = null
     private var common_Registration_Adapter: Common_Registration_Adapter? = null
     private var commonRightMenuFragmentListener: CommonRightMenuFragmentListener? = null
-    private var songsList: ArrayList<SongInfoModel> = ArrayList()
     private var tempList: ArrayList<SongInfoModel> = ArrayList()
 
     interface CommonRightMenuFragmentListener {
@@ -60,12 +60,16 @@ class CommonSearchFragment : Fragment() {
         if (bundle != null) {
             flag = bundle.getInt("flag") // bundle.getInt(getString(R.string.flag));
             from = if (bundle.getString("from") != null) bundle.getString("from")!! else ""
-            songsList = bundle.getSerializable("artist") as ArrayList<SongInfoModel>
-            tempList.addAll(songsList)
+//            songsList = bundle.getSerializable("artist") as ArrayList<SongInfoModel>
+             when (flag) {
+                0 -> tempList.addAll(AppController.mainActivity?.TracksList!!)
+                1 -> tempList.addAll(AppController.mainActivity?.AlbumsList!!)
+                2 -> tempList.addAll(AppController.mainActivity?.ArtistsList!!)
+            }
         }
 
         searchFunctionlaty(reg_search_editText!!)
-        common_Registration_Adapter = Common_Registration_Adapter(context, tempList)
+        common_Registration_Adapter = Common_Registration_Adapter(context, tempList,flag)
         reg_listView?.setAdapter(common_Registration_Adapter)
         reg_listView?.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
             try {

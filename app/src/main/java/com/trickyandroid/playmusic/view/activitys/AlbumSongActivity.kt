@@ -1,20 +1,27 @@
 package com.trickyandroid.playmusic.view.activitys
 
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-
 import android.view.View
 import android.widget.*
+import androidx.annotation.Nullable
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.trickyandroid.playmusic.R
-import com.trickyandroid.playmusic.view.adapters.SongsAdapter
 import com.trickyandroid.playmusic.app.AppController
 import com.trickyandroid.playmusic.models.SongInfoModel
+import com.trickyandroid.playmusic.view.adapters.SongsAdapter
+
 
 class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -34,7 +41,7 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
     var tvTotalTime: TextView? = null
     var tvAlbumTotTime: TextView? = null
     var imvPlayrPause: ImageView? = null
-
+    var searchView: androidx.appcompat.widget.SearchView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_album_song)
@@ -45,9 +52,29 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
         rv = findViewById<View>(R.id.rv) as RecyclerView
         tvArtistName = findViewById<View>(R.id.tvArtistName) as TextView
 //        collapsingToolbar = findViewById<CollapsingToolbarLayout>(R.id.) as CollapsingToolbarLayout
+        searchView = findViewById(R.id.searchView) as SearchView
+        searchView?.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter?.getFilter()?.filter(newText)
+                return true
+            }
+        })
 
         if (MovieSongList?.get(0)?.getSongImgPath() != null && MovieSongList?.get(0)?.getSongImgPath() != "null") {
-            linearMovieImg?.background = BitmapDrawable(MovieSongList?.get(0)?.getSongImgPath())
+
+            Glide.with(this)
+                    .load(Uri.parse(MovieSongList?.get(0)?.getSongImgPath()))
+                    .into(object : CustomTarget<Drawable?>() {
+                        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                        override fun onResourceReady(resource: Drawable, @Nullable transition: Transition<in Drawable?>?) {
+                            linearMovieImg!!.setBackground(resource)
+                        }
+
+                        override fun onLoadCleared(@Nullable placeholder: Drawable?) {}
+                    })
+
         } else {
             var array = resources.obtainTypedArray(R.array.images)
             linearMovieImg?.background = array.getDrawable(0)
@@ -84,9 +111,9 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
         try {
             rv?.setLayoutManager(LinearLayoutManager(this@AlbumSongActivity));
             rv?.setHasFixedSize(true)
-            rv?.setItemViewCacheSize(20)
-            rv?.setDrawingCacheEnabled(true)
-            rv?.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH)
+//            rv?.setItemViewCacheSize(20)
+//            rv?.setDrawingCacheEnabled(true)
+//            rv?.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH)
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -126,9 +153,9 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
                 layoutSongplay?.visibility = View.GONE
             }
 
-            if (MainActivity.SongsInfoList.get(index).getSongImgPath() != null) {
-//                imvSongImage?.setImageURI(Uri.parse(MainActivity.SongsInfoList.get(index).getSongImgPath()))
-//            } else {
+            if (MainActivity.SongsInfoList.get(index)?.getSongImgPath() != null && MainActivity.SongsInfoList.get(index)?.getSongImgPath() != "null") {
+                imvSongImage?.setImageURI(Uri.parse(MainActivity.SongsInfoList.get(index).getSongImgPath()))
+            } else {
                 imvSongImage?.setImageResource(R.drawable.default_album_bg)
             }
 

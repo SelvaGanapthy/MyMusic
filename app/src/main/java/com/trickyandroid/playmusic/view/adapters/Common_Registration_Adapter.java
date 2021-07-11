@@ -32,11 +32,14 @@ public class Common_Registration_Adapter extends BaseAdapter {
     private ArrayList<SongInfoModel> arrayList = new ArrayList<>();
     private ArrayList<SongInfoModel> search_arrayList;
     private LayoutInflater mInflater;
-//    CommonSearchFragment.CommonRightMenuFragmentListener obj;
-    public Common_Registration_Adapter(Context context, ArrayList<SongInfoModel> arrayList) {
+    private int curTabPos;
+
+    //    CommonSearchFragment.CommonRightMenuFragmentListener obj;
+    public Common_Registration_Adapter(Context context, ArrayList<SongInfoModel> arrayList, int curTabPos) {
         super();
         this.context = context;
 //       this.obj=obj;
+        this.curTabPos = curTabPos;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.arrayList = arrayList;
         search_arrayList = new ArrayList<>();
@@ -69,6 +72,7 @@ public class Common_Registration_Adapter extends BaseAdapter {
             holder.linearView.setLayoutParams(params);
             holder.imageView = convertView.findViewById(R.id.ivSong);
             holder.value_textView = convertView.findViewById(R.id.tvMainName);
+            holder.SubName = convertView.findViewById(R.id.tvSubName);
 //            holder.cardView = convertView.findViewById(R.id.cardView);
 //            holder.cardView.setBackgroundResource(R.drawable.card_bg);
             convertView.setTag(holder);
@@ -94,9 +98,22 @@ public class Common_Registration_Adapter extends BaseAdapter {
 //            }
 //        });
 
+        switch (curTabPos) {
+            case 0:
+                holder.SubName.setText(arrayList.get(position).getSongArtist());
+                break;
+            case 1:
+                holder.SubName.setText(arrayList.get(position).getSongMoviename());
+                break;
+            case 2:
+                holder.SubName.setText(arrayList.get(position).getSongArtist());
+                break;
+        }
+
         if (arrayList.size() != 0)//For set no result found
+        {
             holder.value_textView.setText(arrayList.get(position).getSongName());
-        else
+        } else
             holder.value_textView.setText("");
         return convertView;
     }
@@ -105,7 +122,7 @@ public class Common_Registration_Adapter extends BaseAdapter {
     private class ViewHolder {
         private LinearLayout linearView;
         private TextView value_textView;
-//        private CardView cardView;
+        private TextView SubName;
         private ImageView imageView;
 
     }
@@ -119,7 +136,8 @@ public class Common_Registration_Adapter extends BaseAdapter {
                 arrayList.addAll(search_arrayList);
             } else {
                 for (SongInfoModel wp : search_arrayList) {
-                    if (wp.getSongName().toLowerCase(Locale.getDefault()).contains(charText))  //contains
+                    if (wp.getSongName().toLowerCase(Locale.getDefault()).contains(charText) || wp.getSongMoviename().toLowerCase().contains(charText)
+                            || wp.getSongArtist().toLowerCase().contains(charText))  //contains
                         arrayList.add(wp);
                 }
                 final String finalCharText = charText;
@@ -128,15 +146,38 @@ public class Common_Registration_Adapter extends BaseAdapter {
                     public int compare(SongInfoModel s1, SongInfoModel s2) {
                         String s1name = s1.getSongName().toLowerCase();
                         String s2name = s2.getSongName().toLowerCase();
+                        String s11name = s1.getSongMoviename().toLowerCase();
+                        String s22name = s2.getSongMoviename().toLowerCase();
+                        String s111name = s1.getSongArtist().toLowerCase();
+                        String s222name = s2.getSongArtist().toLowerCase();
+
                         int returnValue = 0;
+
+
                         if (!s1name.startsWith(finalCharText) && !s2name.startsWith(finalCharText))
                             returnValue = s1name.compareTo(s2name);
                         else if (s1name.startsWith(finalCharText) && s2name.startsWith(finalCharText))
                             returnValue = s1name.compareTo(s2name);
+                        else if (!s11name.startsWith(finalCharText) && !s22name.startsWith(finalCharText))
+                            returnValue = s11name.compareTo(s22name);
+                        else if (s11name.startsWith(finalCharText) && s22name.startsWith(finalCharText))
+                            returnValue = s11name.compareTo(s22name);
+                        else if (!s111name.startsWith(finalCharText) && !s222name.startsWith(finalCharText))
+                            returnValue = s111name.compareTo(s222name);
+                        else if (s111name.startsWith(finalCharText) && s222name.startsWith(finalCharText))
+                            returnValue = s11name.compareTo(s222name);
                         else {
                             if (s1name.startsWith(finalCharText) && !s2name.startsWith(finalCharText))
                                 returnValue = -1;
                             else if (!s1name.startsWith(finalCharText) && s2name.startsWith(finalCharText))
+                                returnValue = 1;
+                            else if (s11name.startsWith(finalCharText) && !s22name.startsWith(finalCharText))
+                                returnValue = -1;
+                            else if (!s11name.startsWith(finalCharText) && s22name.startsWith(finalCharText))
+                                returnValue = 1;
+                            else if (s111name.startsWith(finalCharText) && !s222name.startsWith(finalCharText))
+                                returnValue = -1;
+                            else if (!s111name.startsWith(finalCharText) && s222name.startsWith(finalCharText))
                                 returnValue = 1;
                         }
                         return returnValue;

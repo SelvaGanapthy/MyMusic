@@ -281,12 +281,6 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                  */
                 override fun onPageSelected(position: Int) {
                     activeTabPos = position
-                    SongsInfoList = when (position) {
-                        0 -> TracksList
-                        1 -> AlbumsList
-                        2 -> ArtistsList
-                        else -> null!!
-                    }
                 }
 
                 /**
@@ -465,6 +459,13 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
     fun SongPlay(index: Int): Unit {
 
         try {
+
+            SongsInfoList = when (activeTabPos) {
+                0 -> TracksList
+                1 -> AlbumsList
+                2 -> ArtistsList
+                else -> null!!
+            }
 
             isFmPlay = false
             activityMainBinding.layoutSongplay.visibility = View.VISIBLE
@@ -921,7 +922,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                 R.id.searchView -> {
                     val bundle = Bundle()
                     bundle.putInt("flag", activeTabPos)
-                    bundle.putSerializable("artist", SongsInfoList)
+//                    bundle.putSerializable("artist", SongsInfoList)
                     activityMainBinding.regFirstDrawerLayout.openDrawer(activityMainBinding.regRightSlidingFrameLayout)
                     //clear backs tack when navigating from slide menu
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)

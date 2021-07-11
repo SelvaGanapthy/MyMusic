@@ -5,6 +5,7 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -109,7 +110,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
                     activitySongPlayerBinding!!.imvSongImage.setImageBitmap(bitmap)
                     activitySongPlayerBinding!!.imvSongImage.adjustViewBounds = true
                     val bler = BlurBuilder()
-                    activitySongPlayerBinding!!.layoutSongPlayerActivity.background = BitmapDrawable(bler.blur(context!!, bitmap))
+                    activitySongPlayerBinding!!.layoutSongPlayerActivity.background = BitmapDrawable(Resources.getSystem(),bler.blur(context!!, bitmap))
 
                 } else {
                     activitySongPlayerBinding!!.imvSongImage.setImageResource(R.drawable.default_album_bg)
@@ -237,7 +238,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         val model = MainActivity.SongsInfoList[MainActivity.currentSongIndex]
         val bler = BlurBuilder()
         val b = BitmapFactory.decodeResource(context!!.resources, R.drawable.default_album_bg)
-        relativeAlertSnapshot.background = BitmapDrawable(bler.blur(SongPlayerActivity?.context!!, b))
+        relativeAlertSnapshot.background = BitmapDrawable(context!!.resources,bler.blur(SongPlayerActivity?.context!!, b))
 
         try {
             tvMovieName.text = "UnKnown"
@@ -252,7 +253,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
             if (model.getSongImgPath().length != 0 && model.getSongImgPath() != null) {
                 imvSongImage1.setImageURI(Uri.parse(model.getSongImgPath()))
                 val bitmap = BitmapFactory.decodeFile(model.getSongImgPath())
-                relativeAlertSnapshot.background = BitmapDrawable(bler.blur(SongPlayerActivity?.context!!, bitmap))
+                relativeAlertSnapshot.background = BitmapDrawable(context!!.resources,bler.blur(SongPlayerActivity?.context!!, bitmap))
             }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
