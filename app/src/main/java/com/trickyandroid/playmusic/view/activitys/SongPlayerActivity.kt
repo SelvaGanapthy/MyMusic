@@ -116,8 +116,10 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
                     activitySongPlayerBinding!!.imvSongImage.setImageResource(R.drawable.default_album_bg)
                 }
 
-                EqualizerActivity.getInstance().setupVisualizerFxAndUI()
-                EqualizerActivity.mVisualizer!!.enabled = true
+                if(AppController.equalizerActivity!=null){
+//                EqualizerActivity.getInstance().setupVisualizerFxAndUI()
+                AppController.equalizerActivity?.setupVisualizerFxAndUI()
+                EqualizerActivity .mVisualizer!!.enabled = true}
 
             } catch (e: Exception) {
                 e.printStackTrace()

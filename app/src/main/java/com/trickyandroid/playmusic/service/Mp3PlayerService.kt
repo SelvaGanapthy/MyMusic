@@ -30,12 +30,12 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.trickyandroid.playmusic.R
-import com.trickyandroid.playmusic.view.activitys.MainActivity
-import com.trickyandroid.playmusic.view.activitys.OnlineRadioActivity
-import com.trickyandroid.playmusic.view.activitys.SongPlayerActivity
 import com.trickyandroid.playmusic.app.AppController
 import com.trickyandroid.playmusic.utils.Constants
 import com.trickyandroid.playmusic.utils.MediaNotificationManager
+import com.trickyandroid.playmusic.view.activitys.MainActivity
+import com.trickyandroid.playmusic.view.activitys.OnlineRadioActivity
+import com.trickyandroid.playmusic.view.activitys.SongPlayerActivity
 import org.greenrobot.eventbus.EventBus
 
 
@@ -48,7 +48,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
     private var onGoingCall = false
     private var telephonyManager: TelephonyManager? = null
     var appContext: Context? = null
-
+    private var status: String? = null
     //    Exo
     private var wifiLock: WifiManager.WifiLock? = null
     private val iBinder: IBinder = LocalBinder()
@@ -88,7 +88,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
                     this@Mp3PlayerService.exoPlayer?.playWhenReady = true
                     notificationManagers?.startNotify(Constants.PLAYING)
                     MainActivity.activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
-                    if (SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle() != null && !SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                    if ( SongPlayerActivity.activitySongPlayerBinding!=null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle() != null && !SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                         SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
                 }
             }
@@ -163,7 +163,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
                         this@Mp3PlayerService.exoPlayer?.playWhenReady = false
 
                         MainActivity.activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_play_arrow_black_24dp)
-                        if (SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                        if (SongPlayerActivity.activitySongPlayerBinding!=null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                             SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
 
                         notificationManagers?.startNotify(Constants.PAUSED)
@@ -175,7 +175,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
                     MainActivity.activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
 
                     try {
-                        if (!SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                        if ( SongPlayerActivity.activitySongPlayerBinding!=null && !SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                             SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
 
 
@@ -255,6 +255,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
         filter.addAction(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT.toString())
         registerReceiver(becomingNoisyReceiver, filter)
         MainActivity.exoPlayer?.addListener(this)
+        status = Constants.IDLE
     }
 
 
@@ -311,7 +312,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
 
                 MainActivity.activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_play_arrow_black_24dp)
 
-                if (SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause != null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                if (SongPlayerActivity.activitySongPlayerBinding!=null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause != null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                     SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
 
                 if (MainActivity.isFmPlay) {
@@ -327,7 +328,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
             MainActivity.activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
 
             try {
-                if (!SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                if (SongPlayerActivity.activitySongPlayerBinding!=null && !SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                     SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
 
             } catch (e: Exception) {
@@ -351,11 +352,15 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
                 currentSongIndex--
                 this@Mp3PlayerService.playSong(currentSongIndex)
                 MainActivity.currentSongIndex = currentSongIndex
+                if (status != Constants.IDLE)
+                    notificationManagers?.startNotify(status!!)
                 return
             }
             currentSongIndex = size - 1
             this@Mp3PlayerService.playSong(currentSongIndex)
             MainActivity.currentSongIndex = currentSongIndex
+            if (status != Constants.IDLE)
+                notificationManagers?.startNotify(status!!)
         }
         return
     }
@@ -367,11 +372,15 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
                 currentSongIndex++
                 this@Mp3PlayerService.playSong(currentSongIndex)
                 MainActivity.currentSongIndex = currentSongIndex
+                if (status != Constants.IDLE)
+                    notificationManagers?.startNotify(status!!)
                 return
             }
 
             this@Mp3PlayerService.playSong(0)
             MainActivity.currentSongIndex = 0
+            if (status != Constants.IDLE)
+                notificationManagers?.startNotify(status!!)
         }
         return
     }
@@ -427,8 +436,8 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
 
             if (MainActivity.isFmPlay) {
                 AppController.onlineRadioActivity?.setRadioDetails(MainActivity.SongsInfoList[songIndex])
-                MainActivity.SongsInfoList[MainActivity.currentSongIndex].setSongMoviename(MainActivity.SongsInfoList[songIndex].getSongMoviename())
-                MainActivity.SongsInfoList[MainActivity.currentSongIndex].setSongName(MainActivity.SongsInfoList[songIndex].getSongName())
+//                MainActivity.SongsInfoList[MainActivity.currentSongIndex].setSongMoviename(MainActivity.SongsInfoList[songIndex].getSongMoviename())
+//                MainActivity.SongsInfoList[MainActivity.currentSongIndex].setSongName(MainActivity.SongsInfoList[songIndex].getSongName())
                 return
             }
 
@@ -468,7 +477,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
 
                 if (this@Mp3PlayerService.exoPlayer?.playWhenReady!!) {
                     this@Mp3PlayerService.exoPlayer?.playWhenReady = false
-                    if (SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                    if (SongPlayerActivity.activitySongPlayerBinding != null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                         SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
                     MainActivity.activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                     notificationManagers?.startNotify(Constants.PAUSED)
@@ -499,7 +508,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
     }
 
     override fun onPlayerError(error: ExoPlaybackException?) {
-
+        EventBus.getDefault().post(Constants.ERROR)
     }
 
     override fun onLoadingChanged(isLoading: Boolean) {
@@ -525,11 +534,16 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         if (!playWhenReady) {
             notificationManagers?.startNotify(Constants.PAUSED)
-            EventBus.getDefault().post(Constants.PAUSED)
+            status= Constants.PAUSED
         } else {
             notificationManagers?.startNotify(Constants.PLAYING)
-            EventBus.getDefault().post(Constants.PLAYING)
+            status= Constants.PLAYING
         }
+
+        if (status != Constants.IDLE)
+            notificationManagers?.startNotify(status!!)
+
+        EventBus.getDefault().post(status)
     }
 
     private fun wifiLockRelease() {

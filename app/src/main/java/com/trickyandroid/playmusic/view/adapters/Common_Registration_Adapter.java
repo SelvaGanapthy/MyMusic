@@ -97,17 +97,22 @@ public class Common_Registration_Adapter extends BaseAdapter {
 //                obj.onItemSelect(search_arrayList.get(position).getId(),"key",search_arrayList.get(position).getSongName());
 //            }
 //        });
-
-        switch (curTabPos) {
-            case 0:
-                holder.SubName.setText(arrayList.get(position).getSongArtist());
-                break;
-            case 1:
-                holder.SubName.setText(arrayList.get(position).getSongMoviename());
-                break;
-            case 2:
-                holder.SubName.setText(arrayList.get(position).getSongArtist());
-                break;
+        try {
+            switch (curTabPos) {
+                case 0:
+                    if (arrayList.get(position).getSongArtist() != null)
+                        holder.SubName.setText(arrayList.get(position).getSongArtist());
+                    break;
+                case 1:
+                    if (arrayList.get(position).getSongMoviename() != null)
+                        holder.SubName.setText(arrayList.get(position).getSongMoviename());
+                    break;
+                case 2:
+                    if (arrayList.get(position).getSongArtist() != null)
+                        holder.SubName.setText(arrayList.get(position).getSongArtist());
+                    break;
+            }
+        } catch (Exception e) {
         }
 
         if (arrayList.size() != 0)//For set no result found

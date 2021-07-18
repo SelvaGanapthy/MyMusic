@@ -324,7 +324,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 
         id = 0
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val c = applicationContext.contentResolver.query(uri, null, MediaStore.Audio.Media.IS_MUSIC + " != 0", null, null)
+        val c = applicationContext.contentResolver.query(uri, null, MediaStore.Audio.Media.ALBUM_ARTIST+ " != 0", null, null)
 
         runOnUiThread(object : Runnable {
             override fun run() {
@@ -574,7 +574,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                 activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 AppController.albumSongActivity?.imvPlayrPause?.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 try {
-                    if (SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                    if (SongPlayerActivity.activitySongPlayerBinding!=null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                         SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
 
 
@@ -596,7 +596,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                 activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
                 AppController.albumSongActivity?.imvPlayrPause?.setImageResource(R.drawable.ic_pause_black_24dp)
                 try {
-                    if (!SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                    if (SongPlayerActivity.activitySongPlayerBinding!=null &&!SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                         SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
                 } catch (e: Exception) {
                     e.printStackTrace()

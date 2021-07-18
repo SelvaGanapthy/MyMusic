@@ -33,6 +33,7 @@ class MediaNotificationManager constructor(val service: Mp3PlayerService) {
     fun startNotify(playbackStatus: String) {
 
         try {
+            if(!service.path.isNullOrEmpty())
             Mp3PlayerService.retriever.setDataSource(service.path)
         } catch (e: Exception) {
             e.printStackTrace()

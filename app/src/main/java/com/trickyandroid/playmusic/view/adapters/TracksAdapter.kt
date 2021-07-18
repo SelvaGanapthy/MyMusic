@@ -180,12 +180,12 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
 
         init {
             tvSongName = itemView?.findViewById<View>(R.id.tvMainName) as TextView
-            tvArtistName = itemView?.findViewById<View>(R.id.tvSubName) as TextView
-            tvSongTime = itemView?.findViewById<View>(R.id.tvSongTime) as TextView
-            cardView = itemView?.findViewById<View>(R.id.cardView) as CardView
+            tvArtistName = itemView.findViewById<View>(R.id.tvSubName) as TextView
+            tvSongTime = itemView.findViewById<View>(R.id.tvSongTime) as TextView
+            cardView = itemView.findViewById<View>(R.id.cardView) as CardView
             cardView?.setBackgroundResource(R.drawable.card_bg1)
-            ivSong = itemView?.findViewById<View>(R.id.ivSong) as ImageView
-            lineCode = itemView?.findViewById<View>(R.id.lineCode) as View
+            ivSong = itemView.findViewById<View>(R.id.ivSong) as ImageView
+            lineCode = itemView.findViewById<View>(R.id.lineCode) as View
             lineCode?.setBackgroundColor(Color.TRANSPARENT)
         }
     }

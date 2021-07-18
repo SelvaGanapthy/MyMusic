@@ -191,7 +191,7 @@ class AlbumsTab() : Fragment(), ISearch {
 
     fun loadMovieSongList(movieName: String): Unit {
 
-        var movieSongList: ArrayList<SongInfoModel> = ArrayList()
+        val movieSongList: ArrayList<SongInfoModel> = ArrayList()
         var tm: Long = 0
         try {
                movieSongList.clear()
@@ -201,7 +201,6 @@ class AlbumsTab() : Fragment(), ISearch {
                     val arr = models.getSongTime().split(":")
                     tm += Integer.parseInt(arr[1].replace(" ", "")).toLong()
                     tm += (60 * Integer.parseInt(arr[0].replace(" ", ""))).toLong()
-
                     movieSongList.add(models)
                 }
             }

@@ -84,11 +84,9 @@ class CommonSearchFragment : Fragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
-        )
+        })
 
         return view
-
     }
 
 

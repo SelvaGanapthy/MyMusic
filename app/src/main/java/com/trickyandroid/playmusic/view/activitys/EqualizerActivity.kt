@@ -103,7 +103,7 @@ class EqualizerActivity : AppCompatActivity() {
             seekBarRowLayout.layoutParams = seekbarlayoutParams
 
             //        setup Lower Level Textview for this seekbar
-            var lowerEqualizerBandLevelTextView = TextView(this)
+            val lowerEqualizerBandLevelTextView = TextView(this)
             lowerEqualizerBandLevelTextView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             lowerEqualizerBandLevelTextView.text = (lowerEqualizerBandlevel / 100).toString() + "dB"
             lowerEqualizerBandLevelTextView.setTextColor(Color.parseColor("#FFFFFF"))
