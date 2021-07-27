@@ -23,7 +23,6 @@ import com.trickyandroid.playmusic.models.SongInfoModel
 import com.trickyandroid.playmusic.utils.CustomProgressBar
 
 
-
 class OnlineRadioActivity : AppCompatActivity() {
 
     var ivRadioStop: ImageView? = null
@@ -38,7 +37,7 @@ class OnlineRadioActivity : AppCompatActivity() {
         @SuppressLint("StaticFieldLeak")
         var imvPlayrPause: ImageView? = null
 
-        val radioName = Array<String>(7) { "" }
+        val radioName = Array<String>(13) { "" }
 
         val radioImage = arrayOf(
                 "https://pbs.twimg.com/profile_images/1084655957735555072/rN1VErvx.jpg",
@@ -46,11 +45,17 @@ class OnlineRadioActivity : AppCompatActivity() {
                 "https://www.mwallpapers.com/photos/celebrities/ilayaraja/ilayaraja-best-hd-photos-1080p-fenuhl.png?v=1576487045",
                 "https://www.logolynx.com/images/logolynx/fd/fd208ae54197cb7d7e22b9c0015e6be5.png",
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD4WWgoVab5CveTN0dbWuZ5gF095bqbQoPng&usqp=CAU",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiIu8NNxCS7PASj-Gfxb7D4Avqo3EhKcY7bg&usqp=CAU",
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlzWmE_RkQdOVgMWRilTxe5l3PNY9IV1I38Q&usqp=CAU",
-                "https://i0.wp.com/www.wordzz.com/wp-content/uploads/2017/05/Lord-Shiva-with-Parvati-Ganesha-Kartik.jpg?w=540&ssl=1"
+                "https://i0.wp.com/www.wordzz.com/wp-content/uploads/2017/05/Lord-Shiva-with-Parvati-Ganesha-Kartik.jpg?w=540&ssl=1",
+                "https://onlineradiofm.in/assets/image/radio/180/tamil-kuji.png",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS119m1X15Namn9EdLfhkiG9z8u1QERmlxpig&usqp=CAU",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4I3CnHzaDd_LjjZn_v2wuatOp3Y4LgvNteQ&usqp=CAU",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEnUaIfsTzq5IOhfO_8DXAsK9k4ZfC3Na3sw&usqp=CAU",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSfqPGCX7x1YyXL7sBtMiqRo7OVPL1Ij8Q0Q&usqp=CAU"
         )
 
-        var streamName = Array<String>(7) { "" }
+        var streamName = Array<String>(13) { "" }
         var customProgressBar: CustomProgressBar? = null
         var relativeFm: RelativeLayout? = null
         var rvRadio: RecyclerView? = null
@@ -124,22 +129,34 @@ class OnlineRadioActivity : AppCompatActivity() {
 //        streamName[5] = "https://radioindia.net/radio/air_tamil_radio/icecast.audio"
         streamName[2] = "http://176.31.120.92:17266/;"
         streamName[3] = "http://195.154.217.103:8175"
-        streamName[4]= "http://167.114.131.90:5750"
-        streamName[5]= "http://19233.live.streamtheworld.com/OMRADIO_S01AAC_SC"
-        streamName[6]=   "http://listen.shoutcast.com/bakthi"
+        streamName[4] = "http://167.114.131.90:5750"
+        streamName[5] = "http://prclive1.listenon.in:9948"
+        streamName[6] = "http://19233.live.streamtheworld.com/OMRADIO_S01AAC_SC"
+        streamName[7] = "http://listen.shoutcast.com/bakthi"
+        streamName[8] = "http://live.tamilkuyilradio.com:8095"
+        streamName[9]= "http://192.99.170.8:5756"
+        streamName[10]=  "http://s5.voscast.com:7736"
+        streamName[11]="http://listen.radionomy.com:80/80s90ssuperpophits"
+        streamName[12]= "http://15363.live.streamtheworld.com/KABCAM_SC"
 
         radioName[0] = "Big Fm 92.7"
         radioName[1] = "Tamil Fm 89.4"
         radioName[2] = "Illaya Raja"
         radioName[3] = "A9RADIO"
         radioName[4] = "vMusic Latest Hits"
-        radioName[5] = "Devotional Hindu OM Radio"
-        radioName[6]="Devotional Hindu Bakthi Radio"
+        radioName[5] = "RadioCity Tamil"
+        radioName[6] = "Devotional Hindu OM Radio"
+        radioName[7] = "Devotional Hindu Bakthi Radio"
+        radioName[8] ="Tamil Kuyil"
+        radioName[9] ="Tamil Abinayam"
+        radioName[10] ="English FreeTalk Live"
+        radioName[11] =  "Super PopHits"
+        radioName[12] ="English Hits"
 
         if (MainActivity.isFmPlay && radioList.isNullOrEmpty())
             radioList = MainActivity.SongsInfoList
         else if (radioList.isNullOrEmpty()) {
-            for (i in 0 until 7) {
+            for (i in 0 until 13) {
                 val sm = SongInfoModel()
                 sm.setSongPath(streamName[i])
                 sm.setSongName(radioName[i])
