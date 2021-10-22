@@ -48,6 +48,7 @@ import com.trickyandroid.playmusic.databinding.ActivityMainBinding
 import com.trickyandroid.playmusic.models.SongInfoModel
 import com.trickyandroid.playmusic.service.Mp3PlayerService
 import com.trickyandroid.playmusic.service.Mp3Receiver
+import com.trickyandroid.playmusic.utils.Constants
 import com.trickyandroid.playmusic.utils.Utilities
 import com.trickyandroid.playmusic.view.fragement.AlbumsTab
 import com.trickyandroid.playmusic.view.fragement.ArtistsTab
@@ -332,19 +333,19 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                     do {
                         try {
                             val model = SongInfoModel()
-                            val duration = c.getLong(c.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                            val duration = c.getLong(c.getColumnIndex(Constants.MediaStore_DURATION))
                             model.setId(id)
-                            model.setSongFileId(c.getString(c.getColumnIndex(MediaStore.Audio.Media._ID)))
-                            model.setAlbumId(c.getLong(c.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)))
-                            model.setSongPath(c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA)))
-                            model.setSongMoviename(StringFilter(c.getString(c.getColumnIndex(MediaStore.Audio.Media.ALBUM))))
-                            model.setSongArtist(c.getString(c.getColumnIndex(MediaStore.Audio.Media.ARTIST)))
-                            val artImgUri: Uri = Uri.parse("content://media/external/audio/albumart")
-                            model.setSongImgPath(ContentUris.withAppendedId(artImgUri, c.getLong(c.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))).toString())
-                            model.setSongName(StringFilter(c.getString(c.getColumnIndex(MediaStore.Audio.Media.TITLE))))
-                            model.setSongComposer(StringFilter(c.getString(c.getColumnIndex(MediaStore.Audio.Media.COMPOSER))))
-                            val dur = c.getInt(c.getColumnIndex(MediaStore.Audio.Media.DURATION))
-                            val size = c.getInt(c.getColumnIndex("_size"))
+                            model.setSongFileId(c.getString(c.getColumnIndex(Constants.MediaStore_ID)))
+                            model.setAlbumId(c.getLong(c.getColumnIndex(Constants.MediaStore_ALBUM_ID)))
+                            model.setSongPath(c.getString(c.getColumnIndex(Constants.MediaStore_DATA)))
+                            model.setSongMoviename(StringFilter(c.getString(c.getColumnIndex(Constants.MediaStore_ALBUM))))
+                            model.setSongArtist(c.getString(c.getColumnIndex(Constants.MediaStore_ARTIST)))
+                            val artImgUri: Uri = Uri.parse(Constants.MediaStore_ALBUM_MART)
+                            model.setSongImgPath(ContentUris.withAppendedId(artImgUri, c.getLong(c.getColumnIndex(Constants.MediaStore_ALBUM_ID))).toString())
+                            model.setSongName(StringFilter(c.getString(c.getColumnIndex(Constants.MediaStore_TITLE))))
+                            model.setSongComposer(StringFilter(c.getString(c.getColumnIndex(Constants.MediaStore_COMPOSER))))
+                            val dur = c.getInt(c.getColumnIndex(Constants.MediaStore_DURATION))
+                            val size = c.getInt(c.getColumnIndex(Constants.MediaStore_SIZE))
 
                             if (!(size == 0 || dur == 0)) {
                                 val bitrate = size * 8 / dur
