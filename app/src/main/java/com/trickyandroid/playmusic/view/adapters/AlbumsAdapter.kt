@@ -38,7 +38,7 @@ class AlbumsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
 
 
         if (dataList.isEmpty()) {
-            holder.tvMovieName?.setText("\t\t\t\t\t\t\t\t    No Data Found!")
+            holder.tvMovieName?.text="\t\t\t\t\t\t\t\t    No Data Found!"
             holder.tvArtist?.visibility = View.GONE
             holder.tvSongTime?.visibility = View.GONE
             holder.ivSong?.visibility = View.GONE
@@ -51,9 +51,9 @@ class AlbumsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
                 holder.ivSong?.visibility = View.VISIBLE
                 holder.tvArtist?.visibility = View.VISIBLE
 
-                val model: SongInfoModel = filterList.get(position)
+                val model: SongInfoModel = filterList[position]
                 holder.tvSongTime?.visibility = View.GONE
-                if (model.getSongImgPath() != null) {
+                if (model.getSongImgPath().isNotEmpty()) {
                   Glide.with(context)
                             .load(Uri.parse(model.getSongImgPath()))
                             .error(R.drawable.default_album_bg)
@@ -65,9 +65,9 @@ class AlbumsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
                 }
 
 
-                holder.cardView?.setOnClickListener(View.OnClickListener { view ->
+                holder.cardView?.setOnClickListener {
                     AppController.albumsTab?.loadMovieSongList(model.getSongMoviename())
-                })
+                }
 
                 holder.tvMovieName?.text = model.getSongMoviename()
                 holder.tvArtist?.text = model.getSongComposer()
@@ -76,7 +76,7 @@ class AlbumsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
                 e.printStackTrace()
             }
         }
-        AnimationUtils.animateSunblind(holder!!, true)
+        AnimationUtils.animateSunblind(holder, true)
     }
 
     override fun getItemId(position: Int): Long {
@@ -114,12 +114,12 @@ class AlbumsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
                     filterList = filteredList1
                 }
 
-                val filterResults = Filter.FilterResults()
+                val filterResults = FilterResults()
                 filterResults.values = filterList
                 return filterResults
             }
 
-            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
+            override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
                 filterList = filterResults.values as ArrayList<SongInfoModel>
                 notifyDataSetChanged()
             }
@@ -149,6 +149,5 @@ class AlbumsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
         }
 
     }
-
 
 }

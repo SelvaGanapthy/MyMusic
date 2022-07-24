@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color.blue
 import android.graphics.Outline
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
@@ -33,7 +32,7 @@ class PlayPauseView(context: Context, attrs: AttributeSet?) : FrameLayout(contex
     private var mWidth = 0
 
     companion object {
-        private val PLAY_PAUSE_ANIMATION_DURATION: Long = 200
+        private val PLAYPAUSEANIMATIONDURATION: Long = 200
 
         private val COLOR: Property<PlayPauseView, Int> = object : Property<PlayPauseView, Int>(Int::class.java, "color") {
             override fun get(v: PlayPauseView): Int {
@@ -52,7 +51,7 @@ class PlayPauseView(context: Context, attrs: AttributeSet?) : FrameLayout(contex
         mPaint.isAntiAlias = true
         mPaint.style = Paint.Style.FILL
         mDrawable = PlayPauseDrawable(context)
-        mDrawable?.setCallback(this)
+        mDrawable?.callback=this
         mPauseBackgroundColor = resources.getColor(R.color.purple)
         mPlayBackgroundColor = resources.getColor(R.color.blue)
 
@@ -73,7 +72,7 @@ class PlayPauseView(context: Context, attrs: AttributeSet?) : FrameLayout(contex
             outlineProvider = object : ViewOutlineProvider() {
                 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                 override fun getOutline(view: View, outline: Outline) {
-                    outline.setOval(0, 0, view.getWidth(), view.getHeight())
+                    outline.setOval(0, 0, view.width, view.height)
                 }
             }
             clipToOutline = true
@@ -110,8 +109,8 @@ class PlayPauseView(context: Context, attrs: AttributeSet?) : FrameLayout(contex
         val colorAnim = ObjectAnimator.ofInt(this, COLOR, if (isPlay) mPauseBackgroundColor else mPlayBackgroundColor)
         colorAnim.setEvaluator(ArgbEvaluator())
         val pausePlayAnim = mDrawable?.getPausePlayAnimator()
-        mAnimatorSet?.setInterpolator(DecelerateInterpolator())
-        mAnimatorSet?.setDuration(PLAY_PAUSE_ANIMATION_DURATION)
+        mAnimatorSet?.interpolator=DecelerateInterpolator()
+        mAnimatorSet?.duration=PLAYPAUSEANIMATIONDURATION
         mAnimatorSet?.playTogether(colorAnim, pausePlayAnim)
         mAnimatorSet?.start()
         return isPlay

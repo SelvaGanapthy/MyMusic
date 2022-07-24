@@ -19,22 +19,23 @@ import com.trickyandroid.playmusic.view.interfaces.IFragmentListener
 import com.trickyandroid.playmusic.view.interfaces.ISearch
 import com.trickyandroid.playmusic.models.SongInfoModel
 
-class TracksTab() : Fragment(), ISearch {
-    var vi: View? = null
-    var rv: RecyclerView? = null
-    var adapter: TracksAdapter? = null
-    var TracksList: ArrayList<SongInfoModel> = ArrayList()
+class TracksTab : Fragment(R.layout.layout_recyclerview), ISearch {
+
+    private var rv: RecyclerView? = null
+    private var adapter: TracksAdapter? = null
+    private var tracksList: ArrayList<SongInfoModel> = ArrayList()
+
     /*Search View*/
-    var mIFragmentListener: IFragmentListener? = null
-    var mSearchTerm: String? = null
-    var swipeRefreshHotcases: SwipeRefreshLayout? = null
+    private var mIFragmentListener: IFragmentListener? = null
+    private var mSearchTerm: String? = null
+    private var swipeRefreshHotcases: SwipeRefreshLayout? = null
 
     companion object {
         val ARG_SEARCHTERM: String = "search_term"
 
         fun newInstances(searchTerm: String): TracksTab {
-            var fragement: TracksTab = TracksTab()
-            var bundle: Bundle = Bundle()
+            val fragement = TracksTab()
+            val bundle = Bundle()
             bundle.putString(ARG_SEARCHTERM, searchTerm)
             fragement.arguments = bundle
             return fragement
@@ -46,81 +47,86 @@ class TracksTab() : Fragment(), ISearch {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         try {
             AppController.tracksTab = this
-            vi = inflater?.inflate(R.layout.layout_recyclerview, container, false)
-            rv = vi?.findViewById<View>(R.id.rv) as RecyclerView
-            this.TracksList = arguments?.getSerializable("SongsInfoList") as (ArrayList<SongInfoModel>)
-            swipeRefreshHotcases = vi?.findViewById<View>(R.id.swiperRefresh) as SwipeRefreshLayout
-            swipeRefreshHotcases?.setColorSchemeResources(R.color.swipe1, R.color.swipe2, R.color.swipe3)
+            rv = view.findViewById<View>(R.id.rv) as RecyclerView
+            this.tracksList = arguments?.getSerializable("SongsInfoList") as (ArrayList<SongInfoModel>)
+            swipeRefreshHotcases = view.findViewById<View>(R.id.swiperRefresh) as SwipeRefreshLayout
+            swipeRefreshHotcases?.setColorSchemeResources(
+                R.color.swipe1,
+                R.color.swipe2,
+                R.color.swipe3
+            )
             swipeRefreshHotcases?.setOnRefreshListener {
                 Handler(Looper.getMainLooper()).postDelayed({
                     try {
-                        swipeRefreshHotcases?.setRefreshing(false)
+                        swipeRefreshHotcases?.isRefreshing = false
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
                 }, 500)
             }
 
-            set_animator()
-            set_layout_manager()
-            set_adapter()
-
+            setAnimator()
+            setLayoutManager()
+            setAdapter()
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return vi
+
+        super.onViewCreated(view, savedInstanceState)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
-    private fun set_animator(): Unit {
-        var animator: DefaultItemAnimator = DefaultItemAnimator()
+    private fun setAnimator() {
+        val animator = DefaultItemAnimator()
         animator.changeDuration = 1000
         rv?.itemAnimator = animator
     }
 
-    private fun set_layout_manager(): Unit {
+    private fun setLayoutManager() {
         try {
             rv?.layoutManager = LinearLayoutManager(context)
             rv?.setHasFixedSize(true)
             rv?.setItemViewCacheSize(20)
-            rv?.setDrawingCacheEnabled(true);
-            rv?.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH)
+//            rv?.isDrawingCacheEnabled = true;
+//            rv?.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-
-    private fun set_adapter(): Unit {
+    private fun setAdapter() {
         try {
-
-            adapter = TracksAdapter(requireContext(),TracksList)
+            adapter = TracksAdapter(requireContext(), tracksList)
             rv?.adapter = this.adapter
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mIFragmentListener = context as (IFragmentListener);
-        mIFragmentListener?.addiSearch(this@TracksTab as (ISearch));
+        mIFragmentListener = context as (IFragmentListener)
+        mIFragmentListener?.addiSearch(this@TracksTab as (ISearch))
     }
 
     override fun onDetach() {
         super.onDetach()
         if (null != mIFragmentListener) {
-            mIFragmentListener?.removeISearch(this@TracksTab as (ISearch));
+            mIFragmentListener?.removeISearch(this@TracksTab as (ISearch))
         }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -129,18 +135,14 @@ class TracksTab() : Fragment(), ISearch {
         }
     }
 
-
     override fun onPause() {
         super.onPause()
     }
 
-
-    override fun onTextQuery(text: String): Unit {
+    override fun onTextQuery(text: String) {
         adapter?.getFilter()?.filter(text)
         rv?.recycledViewPool?.clear()
         rv?.isNestedScrollingEnabled = false
         adapter?.notifyDataSetChanged()
     }
-
-
 }

@@ -41,7 +41,7 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
     var tvTotalTime: TextView? = null
     var tvAlbumTotTime: TextView? = null
     var imvPlayrPause: ImageView? = null
-    var searchView: androidx.appcompat.widget.SearchView? = null
+    var searchView: SearchView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_album_song)
@@ -52,8 +52,8 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
         rv = findViewById<View>(R.id.rv) as RecyclerView
         tvArtistName = findViewById<View>(R.id.tvArtistName) as TextView
 //        collapsingToolbar = findViewById<CollapsingToolbarLayout>(R.id.) as CollapsingToolbarLayout
-        searchView = findViewById(R.id.searchView) as SearchView
-        searchView?.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        searchView = findViewById<View>(R.id.searchView) as SearchView
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean = false
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -76,7 +76,7 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
                     })
 
         } else {
-            var array = resources.obtainTypedArray(R.array.images)
+            val array = resources.obtainTypedArray(R.array.images)
             linearMovieImg?.background = array.getDrawable(0)
         }
 
@@ -87,11 +87,10 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
 
         layoutSongplay = findViewById<View>(R.id.layoutSongplay) as LinearLayout
         layoutSongplay?.visibility = View.GONE
-        layoutSongplay?.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
+        layoutSongplay?.setOnClickListener{
                 startActivity(Intent(this@AlbumSongActivity, SongPlayerActivity::class.java))
-            }
-        })
+        }
+
         imvSongImage = findViewById<View>(R.id.imvSongImage) as ImageView
         tvMoviename = findViewById<View>(R.id.tvMoviename) as TextView
         tvSongName = findViewById<View>(R.id.tvSongName) as TextView
@@ -100,16 +99,15 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
         tvAlbumTotTime?.text = intent.getStringExtra("TotalTime")
         imvPlayrPause = findViewById<View>(R.id.imvPlayrPause) as ImageView
 
-
-        set_layout_manager()
-        set_adapter()
+        setLayoutManager()
+        setAdapter()
         songDetails(MainActivity.currentSongIndex)
     }
 
 
-    private fun set_layout_manager(): Unit {
+    private fun setLayoutManager() {
         try {
-            rv?.setLayoutManager(LinearLayoutManager(this@AlbumSongActivity));
+            rv?.layoutManager=LinearLayoutManager(this@AlbumSongActivity)
             rv?.setHasFixedSize(true)
 //            rv?.setItemViewCacheSize(20)
 //            rv?.setDrawingCacheEnabled(true)
@@ -120,10 +118,10 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun set_adapter(): Unit {
+    private fun setAdapter() {
         try {
             adapter = SongsAdapter(this@AlbumSongActivity, MovieSongList!!)
-            rv?.setAdapter(adapter);
+            rv?.adapter=adapter
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -140,7 +138,7 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun songDetails(index: Int): Unit {
+  internal fun songDetails(index: Int){
         try {
 
             if (MainActivity.exoPlayer?.playWhenReady!! && !MainActivity.isFmPlay) {
@@ -153,15 +151,15 @@ class AlbumSongActivity : AppCompatActivity(), View.OnClickListener {
                 layoutSongplay?.visibility = View.GONE
             }
 
-            if (MainActivity.SongsInfoList.get(index)?.getSongImgPath() != null && MainActivity.SongsInfoList.get(index)?.getSongImgPath() != "null") {
-                imvSongImage?.setImageURI(Uri.parse(MainActivity.SongsInfoList.get(index).getSongImgPath()))
+            if (MainActivity.SongsInfoList[index].getSongImgPath() != null && MainActivity.SongsInfoList[index].getSongImgPath() != "null") {
+                imvSongImage?.setImageURI(Uri.parse(MainActivity.SongsInfoList[index].getSongImgPath()))
             } else {
                 imvSongImage?.setImageResource(R.drawable.default_album_bg)
             }
 
-            tvMoviename?.text = MainActivity.SongsInfoList.get(index).getSongMoviename()
-            tvSongName?.text = MainActivity.SongsInfoList.get(index).getSongName()
-            tvTotalTime?.text = MainActivity.SongsInfoList.get(index).getSongTime()
+            tvMoviename?.text = MainActivity.SongsInfoList[index].getSongMoviename()
+            tvSongName?.text = MainActivity.SongsInfoList[index].getSongName()
+            tvTotalTime?.text = MainActivity.SongsInfoList[index].getSongTime()
 
         } catch (e: Exception) {
             e.printStackTrace()

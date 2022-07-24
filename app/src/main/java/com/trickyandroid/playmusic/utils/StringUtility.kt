@@ -1,8 +1,8 @@
 package com.trickyandroid.playmusic.utils
 
+ import android.content.Context
 import androidx.core.os.EnvironmentCompat
-import android.util.Log
-import java.lang.StringBuilder
+import java.io.File
 import java.util.*
 
 object StringUtility {
@@ -61,6 +61,33 @@ object StringUtility {
             titleCase.append(c2)
         }
         return titleCase.toString()
+    }
+
+
+    fun trimCache(context: Context) {
+        try {
+            val dir: File = context.cacheDir
+            if (dir != null && dir.isDirectory) {
+                deleteDir(dir)
+            }
+        } catch (e: Exception) {
+            // TODO: handle exception
+        }
+    }
+
+    private fun deleteDir(dir: File?): Boolean {
+        if (dir != null && dir.isDirectory) {
+            val children: Array<String> = dir.list()
+            for (i in children.indices) {
+                val success = deleteDir(File(dir, children[i]))
+                if (!success) {
+                    return false
+                }
+            }
+        }
+
+        // The directory is now empty so delete it
+        return dir!!.delete()
     }
 
 

@@ -5,9 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,32 +19,30 @@ import com.trickyandroid.playmusic.view.adapters.AlbumsAdapter
 import com.trickyandroid.playmusic.view.interfaces.IFragmentListener
 import com.trickyandroid.playmusic.view.interfaces.ISearch
 
-class AlbumsTab() : Fragment(), ISearch {
+class AlbumsTab : Fragment(R.layout.layout_recyclerview), ISearch {
 
-    var vi: View? = null
-    var rv: RecyclerView? = null
-    var AlbumsList: ArrayList<SongInfoModel> = ArrayList()
-    var movieNameList: ArrayList<String> = ArrayList()
-    var movieList: ArrayList<SongInfoModel> = ArrayList()
-    var swipeRefreshHotcases: SwipeRefreshLayout? = null
-    var adapter: AlbumsAdapter? = null
+    private var rv: RecyclerView? = null
+    var albumsList: ArrayList<SongInfoModel> = ArrayList()
+    private var movieNameList: ArrayList<String> = ArrayList()
+    private var movieList: ArrayList<SongInfoModel> = ArrayList()
+    private var swipeRefreshHotcases: SwipeRefreshLayout? = null
+    private var adapter: AlbumsAdapter? = null
 
     /*Search View*/
-    var mIFragmentListener: IFragmentListener? = null
-    var mSearchTerm: String? = null
+    private var mIFragmentListener: IFragmentListener? = null
+    private var mSearchTerm: String? = null
 
     companion object {
 
         val ARG_SEARCHTERM: String = "search_term"
 
-        fun newInstances(searchTerm: String): TracksTab {
-            var fragement: TracksTab = TracksTab()
-            var bundle: Bundle = Bundle()
+        fun newInstances(searchTerm: String): AlbumsTab {
+            val fragement = AlbumsTab()
+            val bundle = Bundle()
             bundle.putString(TracksTab.ARG_SEARCHTERM, searchTerm)
             fragement.arguments = bundle
             return fragement
         }
-
 
         private fun format(s: Long): String {
             return if (s < 10)
@@ -60,93 +56,82 @@ class AlbumsTab() : Fragment(), ISearch {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        AppController.albumsTab = this;
-        vi = inflater.inflate(R.layout.layout_recyclerview, container, false)
-        rv = vi?.findViewById<View>(R.id.rv) as RecyclerView
-        swipeRefreshHotcases = vi?.findViewById<View>(R.id.swiperRefresh) as SwipeRefreshLayout
-        AlbumsList = arguments?.getSerializable("SongsInfoList") as ArrayList<SongInfoModel>
-        swipeRefreshHotcases?.setColorSchemeResources(R.color.swipe1, R.color.swipe2, R.color.swipe3)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        AppController.albumsTab = this
+        rv = view.findViewById<View>(R.id.rv) as RecyclerView
+        swipeRefreshHotcases = view.findViewById<View>(R.id.swiperRefresh) as SwipeRefreshLayout
+//            requireArguments().getSerializable("SongsInfoList")
+        albumsList = arguments?.getSerializable("SongsInfoList") as ArrayList<SongInfoModel>
+        swipeRefreshHotcases?.setColorSchemeResources(
+            R.color.swipe1,
+            R.color.swipe2,
+            R.color.swipe3
+        )
         swipeRefreshHotcases?.setOnRefreshListener {
             Handler(Looper.getMainLooper()).postDelayed({
                 try {
-                    swipeRefreshHotcases?.setRefreshing(false)
+                    swipeRefreshHotcases?.isRefreshing = false
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }, 500)
         }
 
-
-
-
         try {
-            activity?.runOnUiThread(object : Runnable {
-                override fun run() {
-                    for (i in 0 until AlbumsList.size) {
-                        movieNameList.add(AlbumsList.get(i).getSongMoviename())
-                    }
-
-                    //Set Title has Movie Names
-                    for (i in 0 until movieNameList.size) {
-                        for (j in (i + 1) until movieNameList.size) {
-                            if (movieNameList.get(i).equals(movieNameList.get(j))) {
-                                movieNameList.set(j, "*@#")
-                            }
-                        }
-                    }
-
-                    for (i in 0 until movieNameList.size) {
-                        if (!movieNameList.get(i).equals("*@#")) {
-                            var model: SongInfoModel = SongInfoModel()
-                            model.setSongMoviename(movieNameList.get(i));
-                            model.setSongImgPath(AlbumsList.get(i).getSongImgPath())
-                            model.setSongComposer(AlbumsList.get(i).getSongComposer())
-                            movieList.add(model)
-                        }
-                    }
-
-
+            activity?.runOnUiThread {
+                for (i in 0 until albumsList.size) {
+                    movieNameList.add(albumsList[i].getSongMoviename())
                 }
-            })
 
-            // Filter the MovieName
-            // copied movies name from original list
+                //Set Title has Movie Names
+                for (i in 0 until movieNameList.size) {
+                    for (j in (i + 1) until movieNameList.size) {
+                        if (movieNameList[i] == movieNameList[j]) {
+                            movieNameList[j] = "*@#"
+                        }
+                    }
+                }
 
-            set_animator()
-            set_layout_manager()
-            set_adapter()
+                for (i in 0 until movieNameList.size) {
+                    if (movieNameList[i] != "*@#") {
+                        val model = SongInfoModel()
+                        model.setSongMoviename(movieNameList[i])
+                        model.setSongImgPath(albumsList[i].getSongImgPath())
+                        model.setSongComposer(albumsList[i].getSongComposer())
+                        movieList.add(model)
+                    }
+                }
+            }
 
-
+           /*Filter the MovieName & Copied movies name from original list*/
+            setAnimator()
+            setLayoutManager()
+            setAdapter()
+            super.onViewCreated(view, savedInstanceState)
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-        return vi!!
     }
 
-
-    private fun set_animator(): Unit {
-        var animator: DefaultItemAnimator = DefaultItemAnimator()
+    private fun setAnimator() {
+        val animator = DefaultItemAnimator()
         animator.changeDuration = 1000
         rv?.itemAnimator = animator
     }
 
-    private fun set_layout_manager(): Unit {
+    private fun setLayoutManager() {
         try {
-            rv?.layoutManager = LinearLayoutManager(getContext())
+            rv?.layoutManager = LinearLayoutManager(context)
             rv?.setHasFixedSize(true)
-//            rv?.setItemViewCacheSize(20)
-//            rv?.setDrawingCacheEnabled(true)
-//            rv?.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH)
-
+            rv?.setItemViewCacheSize(20)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-
-    private fun set_adapter(): Unit {
+    private fun setAdapter() {
         try {
             adapter = AlbumsAdapter(requireContext(), movieList)
             rv?.adapter = this.adapter
@@ -154,7 +139,6 @@ class AlbumsTab() : Fragment(), ISearch {
             e.printStackTrace()
         }
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -180,7 +164,6 @@ class AlbumsTab() : Fragment(), ISearch {
         super.onPause()
     }
 
-
     override fun onTextQuery(text: String) {
         adapter?.getFilter()?.filter(text)
         rv?.recycledViewPool?.clear()
@@ -188,16 +171,15 @@ class AlbumsTab() : Fragment(), ISearch {
         adapter?.notifyDataSetChanged()
     }
 
-
-    fun loadMovieSongList(movieName: String): Unit {
+   internal fun loadMovieSongList(movieName: String) {
 
         val movieSongList: ArrayList<SongInfoModel> = ArrayList()
         var tm: Long = 0
         try {
-               movieSongList.clear()
-            for (i in 0 until this.AlbumsList.size) {
-                if (movieName == AlbumsList[i].getSongMoviename()) {
-                    var models: SongInfoModel = AlbumsList[i]
+            movieSongList.clear()
+            for (i in 0 until this.albumsList.size) {
+                if (movieName == albumsList[i].getSongMoviename()) {
+                    val models: SongInfoModel = albumsList[i]
                     val arr = models.getSongTime().split(":")
                     tm += Integer.parseInt(arr[1].replace(" ", "")).toLong()
                     tm += (60 * Integer.parseInt(arr[0].replace(" ", ""))).toLong()
@@ -210,7 +192,7 @@ class AlbumsTab() : Fragment(), ISearch {
             val ss = tm
 
             if (movieSongList.size > 0) {
-                val i: Intent = Intent(activity, AlbumSongActivity::class.java)
+                val i = Intent(activity, AlbumSongActivity::class.java)
                 i.putExtra("MovieSongList", movieSongList)
                 i.putExtra("TotalTime", format(mm) + ":" + format(ss))
                 startActivity(i)

@@ -21,7 +21,8 @@ import com.trickyandroid.playmusic.anim.AnimationUtils
 import com.trickyandroid.playmusic.app.AppController
 
 
-class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>) : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
+class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>) :
+    RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
 
 
     var view: View? = null
@@ -43,10 +44,10 @@ class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>)
 //                            .error(R.drawable.default_album_bg).into(holder.ivSong)
 
                     Glide.with(context)
-                            .load(Uri.parse( model.getSongImgPath()))
-                            .error(R.drawable.default_album_bg)
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                            .into(holder?.ivSong!!)
+                        .load(Uri.parse(model.getSongImgPath()))
+                        .error(R.drawable.default_album_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(holder?.ivSong!!)
 
 
                 } catch (e: Exception) {
@@ -61,14 +62,10 @@ class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>)
             holder.tvSubName?.text = model.getSongComposer()
             holder.tvSongTime?.text = model.getSongTime()
 
-            holder.cardView?.setOnClickListener(object : View.OnClickListener {
-                @SuppressLint("NewApi")
-                override fun onClick(p0: View?) {
-
-                    MainActivity.SongsInfoList = AppController.albumsTab?.AlbumsList!!
-                    AppController.mainActivity?.SongPlay(model.getAlbumnewId())
-                }
-            })
+            holder.cardView?.setOnClickListener {
+                MainActivity.SongsInfoList = AppController.albumsTab?.albumsList!!
+                AppController.mainActivity?.SongPlay(model.getAlbumnewId())
+            }
 
 //            holder.tvArtistName?.text = model.getSongComposer()
 
@@ -82,6 +79,7 @@ class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>)
     override fun getItemCount(): Int {
         return filterList.size
     }
+
     override fun getItemId(position: Int): Long {
         return super.getItemId(position)
     }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.trickyandroid.playmusic">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -27,6 +29,7 @@
     <application xmlns:tools="http://schemas.android.com/tools"
         android:name=".app.AppController"
         android:allowBackup="true"
+        android:requestLegacyExternalStorage="true"
         android:appComponentFactory="whateverString"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher_music"
@@ -42,7 +45,8 @@
         tools:replace="android:appComponentFactory">
         <activity
             android:name="com.trickyandroid.playmusic.view.activitys.SplashActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,7 +69,8 @@
 <!--            </intent-filter>-->
 <!--        </receiver>-->
 
-        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
+        <receiver android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -80,13 +85,15 @@
             android:name="com.trickyandroid.playmusic.view.activitys.MainActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
+            android:exported="true"
             android:screenOrientation="portrait" />
 
         <activity
             android:name="com.trickyandroid.playmusic.view.activitys.SongPlayerActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -109,7 +116,8 @@
             android:name="com.trickyandroid.playmusic.view.activitys.OnlineRadioActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

@@ -29,4 +29,6 @@ object Constants {
     const val MediaStore_COMPOSER = MediaStore.Audio.Media.COMPOSER
     const val MediaStore_SIZE = MediaStore.Audio.Media.SIZE
 
+    const val UNKNOWN="Unknown"
+
 }

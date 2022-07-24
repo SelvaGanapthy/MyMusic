@@ -38,7 +38,7 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
 
         if (dataList.isEmpty()) {
 
-            holder.tvArtistName?.setText("\t\t\t\t\t\t\t\t    No Data Found!")
+            holder.tvArtistName?.text="\t\t\t\t\t\t\t\t    No Data Found!"
             holder.tvSongName?.visibility = View.GONE
             holder.tvSongTime?.visibility = View.GONE
             holder.ivSong?.visibility = View.GONE
@@ -53,9 +53,9 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
                 holder.tvSongTime?.visibility = View.VISIBLE
                 holder.ivSong?.visibility = View.VISIBLE
 
-                val model: SongInfoModel = filterList.get(position)
+                val model: SongInfoModel = filterList[position]
 
-                if (model.getSongPath() != null) {
+                if (model.getSongPath().isNotEmpty()) {
 //                    Picasso.get().load(Uri.parse("file://" + model.getSongImgPath()))
 //                            .error(R.drawable.default_album_bg).into(holder.ivSong)
 
@@ -64,7 +64,7 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
                             .load(Uri.parse(model.getSongImgPath()))
                             .error(R.drawable.default_album_bg)
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .into(holder?.ivSong!!)
+                            .into(holder.ivSong!!)
 
 
                 } else {
@@ -75,12 +75,10 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
                 holder.tvSongTime?.text = model.getSongTime()
                 holder.tvArtistName?.text = model.getSongComposer()
 
-                holder.cardView?.setOnClickListener(View.OnClickListener { view ->
-
+                holder.cardView?.setOnClickListener {
                     MainActivity.SongsInfoList = dataList
                     AppController.mainActivity?.SongPlay(model.getArtistId())
-
-                })
+                }
 
                 AnimationUtils.animateSunblind(holder, true)
 
@@ -105,7 +103,7 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
     fun getFilter(): Filter {
 
         return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
                 val charString = charSequence.toString()
 
                 if (charString.isEmpty()) {
@@ -113,7 +111,7 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
                     filterList = dataList
                 } else {
 
-                    val filteredList1 = java.util.ArrayList<SongInfoModel>()
+                    val filteredList1 = ArrayList<SongInfoModel>()
 
                     for (dataModel in dataList) {
 
@@ -126,12 +124,12 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
                     filterList = filteredList1
                 }
 
-                val filterResults = Filter.FilterResults()
+                val filterResults = FilterResults()
                 filterResults.values = filterList
                 return filterResults
             }
 
-            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
+            override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
                 filterList = filterResults.values as ArrayList<SongInfoModel>
                 notifyDataSetChanged()
             }
@@ -149,12 +147,12 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
 
         init {
             tvArtistName = itemView?.findViewById<View>(R.id.tvMainName) as TextView
-            tvSongName = itemView?.findViewById<View>(R.id.tvSubName) as TextView
-            tvSongTime = itemView?.findViewById<View>(R.id.tvSongTime) as TextView
-            cardView = itemView?.findViewById<View>(R.id.cardView) as CardView
+            tvSongName = itemView.findViewById<View>(R.id.tvSubName) as TextView
+            tvSongTime = itemView.findViewById<View>(R.id.tvSongTime) as TextView
+            cardView = itemView.findViewById<View>(R.id.cardView) as CardView
             cardView?.setBackgroundResource(R.drawable.card_bg1)
-            ivSong = itemView?.findViewById<View>(R.id.ivSong) as ImageView
-            lineCode = itemView?.findViewById<View>(R.id.lineCode) as View
+            ivSong = itemView.findViewById<View>(R.id.ivSong) as ImageView
+            lineCode = itemView.findViewById<View>(R.id.lineCode) as View
             lineCode?.setBackgroundColor(Color.TRANSPARENT)
 
         }

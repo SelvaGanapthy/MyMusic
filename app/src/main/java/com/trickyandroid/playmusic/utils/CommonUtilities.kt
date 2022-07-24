@@ -12,13 +12,13 @@ object CommonUtilities {
     fun hideSoftKeyboard(context: Activity) {
         try {
             val imm: InputMethodManager =  context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(context.getWindow().getDecorView().getWindowToken(), 0)
+            imm.hideSoftInputFromWindow(context.window.decorView.windowToken, 0)
         } catch (e: Exception) {
 //            ExceptionTrack.getInstance().TrackLog(e);
         }
     }
 
-    fun showSoftKeyboard(context: Activity, editText: EditText) {
+   internal fun showSoftKeyboard(context: Activity, editText: EditText) {
         try {
             editText.postDelayed({
                 val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -62,11 +62,11 @@ object CommonUtilities {
      *
      * @param ctxt
      */
-    fun cancelProgressDialog(ctxt: Context?) {
+    private fun cancelProgressDialog(context: Context?) {
         try {
-            if (CommonUtilities.dialog != null && CommonUtilities.dialog?.isShowing()!!) {
-                CommonUtilities.dialog?.dismiss()
-                CommonUtilities.dialog = null
+            if (dialog != null && dialog?.isShowing!!) {
+                dialog?.dismiss()
+                dialog = null
             }
         } catch (e: java.lang.Exception) {
 //            ExceptionTrack.getInstance().TrackLog(e)

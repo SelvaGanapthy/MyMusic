@@ -14,7 +14,6 @@ class Mp3Receiver : BroadcastReceiver() {
     }
 
     override fun onReceive(p0: Context?, intent: Intent?) {
-
         try {
 
 //            AppController.mp3Receiver = this

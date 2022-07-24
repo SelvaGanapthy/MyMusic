@@ -9,7 +9,7 @@ import android.view.Window
 import com.trickyandroid.playmusic.R
 import com.trickyandroid.playmusic.app.AppController
 
-public class CustomProgressBar(context: Context) : Dialog(context) {
+class CustomProgressBar(context: Context) : Dialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +17,7 @@ public class CustomProgressBar(context: Context) : Dialog(context) {
         setContentView(R.layout.custom_progressbar)
         AppController.customProgressBar = this
         setCancelable(false)
-//        set backgroung transparent
+       /*set backgroung transparent*/
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 }

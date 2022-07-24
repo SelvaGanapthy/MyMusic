@@ -38,8 +38,6 @@
 #  *** rewind();
 #}
 
-
-
   -keepattributes *Annotation*
    -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;

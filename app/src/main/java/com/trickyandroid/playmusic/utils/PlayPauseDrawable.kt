@@ -39,10 +39,10 @@ class PlayPauseDrawable : Drawable {
     private var mIsPlay: Boolean = false
 
     constructor(context: Context) {
-        val res: Resources = context.getResources();
-        mPaint.setAntiAlias(true)
-        mPaint.setStyle(Paint.Style.FILL)
-        mPaint.setColor(Color.WHITE)
+        val res: Resources = context.resources
+        mPaint.isAntiAlias=true
+        mPaint.style=Paint.Style.FILL
+        mPaint.color=Color.WHITE
         mPauseBarWidth = res.getDimensionPixelSize(R.dimen.pause_bar_width).toFloat()
         mPauseBarHeight = res.getDimensionPixelSize(R.dimen.pause_bar_height).toFloat()
         mPauseBarDistance = res.getDimensionPixelSize(R.dimen.pause_bar_distance).toFloat()
@@ -126,14 +126,15 @@ class PlayPauseDrawable : Drawable {
     private fun getProgress(): Float = mProgress
 
     override fun setAlpha(alpha: Int) {
-        mPaint.setAlpha(alpha)
+        mPaint.alpha=alpha
         invalidateSelf()
     }
 
     override fun setColorFilter(colorFilter: ColorFilter?) {
-        mPaint.setColorFilter(colorFilter)
+        mPaint.colorFilter=colorFilter
         invalidateSelf()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }

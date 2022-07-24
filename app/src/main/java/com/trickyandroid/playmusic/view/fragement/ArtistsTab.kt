@@ -20,87 +20,93 @@ import com.trickyandroid.playmusic.view.interfaces.ISearch
 import com.trickyandroid.playmusic.models.SongInfoModel
 import java.util.ArrayList
 
-class ArtistsTab() : Fragment(), ISearch {
+class ArtistsTab : Fragment(R.layout.layout_recyclerview), ISearch {
 
-    var vi: View? = null
-    var rv: RecyclerView? = null
-    var ArtistsList: ArrayList<SongInfoModel>? = null
-    var adapter: ArtistsAdapter? = null
+    private var rv: RecyclerView? = null
+    private var artistsList: ArrayList<SongInfoModel>? = null
+    private var adapter: ArtistsAdapter? = null
 
     /*Search View*/
-    var mIFragmentListener: IFragmentListener? = null
-    var mSearchTerm: String? = null
-    var swipeRefreshHotcases: SwipeRefreshLayout? = null
+    private var mIFragmentListener: IFragmentListener? = null
+    private var mSearchTerm: String? = null
+    private var swipeRefreshHotcases: SwipeRefreshLayout? = null
 
     companion object {
         val ARG_SEARCHTERM: String = "search_term"
 
-        fun newInstances(searchTerm: String): TracksTab {
-            var fragement: TracksTab = TracksTab()
-            var bundle: Bundle = Bundle()
+        fun newInstances(searchTerm: String): ArtistsTab {
+            val fragement = ArtistsTab()
+            val bundle = Bundle()
             bundle.putString(TracksTab.ARG_SEARCHTERM, searchTerm)
             fragement.arguments = bundle
             return fragement
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         AppController.artistsTab = this
-        vi = inflater.inflate(R.layout.layout_recyclerview, container, false)
-        rv = vi?.findViewById<View>(R.id.rv) as RecyclerView
-        ArtistsList = arguments?.getSerializable("SongsInfoList") as ArrayList<SongInfoModel>
-        swipeRefreshHotcases = vi?.findViewById<View>(R.id.swiperRefresh) as SwipeRefreshLayout
-        swipeRefreshHotcases?.setColorSchemeResources(R.color.swipe1, R.color.swipe2, R.color.swipe3)
+        rv = view.findViewById<View>(R.id.rv) as RecyclerView
+        artistsList = arguments?.getSerializable("SongsInfoList") as ArrayList<SongInfoModel>
+        swipeRefreshHotcases = view.findViewById<View>(R.id.swiperRefresh) as SwipeRefreshLayout
+        swipeRefreshHotcases?.setColorSchemeResources(
+            R.color.swipe1,
+            R.color.swipe2,
+            R.color.swipe3
+        )
         swipeRefreshHotcases?.setOnRefreshListener {
             Handler(Looper.getMainLooper()).postDelayed({
                 try {
-                    swipeRefreshHotcases?.setRefreshing(false)
+                    swipeRefreshHotcases?.isRefreshing = false
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }, 500)
         }
 
-        set_animator()
-        set_layout_manager()
-        set_adapter()
-
-        return vi
+        setAnimator()
+        setLayoutManager()
+        setAdapter()
+        super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun set_animator(): Unit {
-        var animator: DefaultItemAnimator = DefaultItemAnimator()
+    private fun setAnimator() {
+        val animator = DefaultItemAnimator()
         animator.changeDuration = 1000
         rv?.itemAnimator = animator
     }
 
-    private fun set_layout_manager(): Unit {
+    private fun setLayoutManager() {
         try {
-            rv?.layoutManager = LinearLayoutManager(getContext())
+            rv?.layoutManager = LinearLayoutManager(context)
             rv?.setHasFixedSize(true)
             rv?.setItemViewCacheSize(20)
-            rv?.setDrawingCacheEnabled(true)
-            rv?.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH)
+            rv?.isDrawingCacheEnabled = true
+            rv?.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun set_adapter(): Unit {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = super.onCreateView(inflater, container, savedInstanceState)
+
+    private fun setAdapter() {
         try {
-            adapter = ArtistsAdapter(requireContext(), ArtistsList!!)
+            adapter = ArtistsAdapter(requireContext(), artistsList!!)
             rv?.adapter = this.adapter
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mIFragmentListener = context as (IFragmentListener);
-        mIFragmentListener?.addiSearch(this@ArtistsTab as (ISearch));
+        mIFragmentListener = context as (IFragmentListener)
+        mIFragmentListener?.addiSearch(this@ArtistsTab as (ISearch))
     }
 
     override fun onDetach() {
@@ -127,5 +133,4 @@ class ArtistsTab() : Fragment(), ISearch {
         rv?.isNestedScrollingEnabled = false
         adapter?.notifyDataSetChanged()
     }
-
 }

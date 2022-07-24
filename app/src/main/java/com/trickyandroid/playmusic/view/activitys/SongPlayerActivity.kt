@@ -34,14 +34,13 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import com.trickyandroid.playmusic.databinding.ActivitySongPlayerBinding
 import com.trickyandroid.playmusic.viewmodel.SongPlayerViewModel
-import androidx.appcompat.widget.*
 
-class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Observer, LifecycleOwner {
+class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Observer,
+    LifecycleOwner {
 
     val viewModel = SongPlayerViewModel()
 
@@ -55,6 +54,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         var context: Context? = null
         var utils: Utilities? = null
 
+        //        var songComposer: String? = null
         //        var MovieName: String? = null
         var movieYear: String? = null
         var songName: String? = null
@@ -71,7 +71,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
         fun songDetails(index: Int) {
             try {
-                if (activitySongPlayerBinding==null)
+                if (activitySongPlayerBinding == null)
                     return
 
                 if (MainActivity.exoPlayer?.playWhenReady!!) {
@@ -82,44 +82,42 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
                         activitySongPlayerBinding!!.fabPlaynPause.toggle()
                 }
 
-                mmr.setDataSource(MainActivity.SongsInfoList[index].getSongPath().toString())
+                mmr.setDataSource(MainActivity.SongsInfoList[index].getSongPath())
                 movieYear = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR)
                 songName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
 
-                if (  songName != null) {
-                    activitySongPlayerBinding!!.tvSongName.text = "$songName Song "
-                }
+                activitySongPlayerBinding!!.tvSongName.text =  if (!songName.isNullOrEmpty())
+                    "$songName Song " else Constants.UNKNOWN
 
-                if (movieYear != null) {
-                    activitySongPlayerBinding!!.tvSongYear.text = "" + movieYear!!
-                }
+                activitySongPlayerBinding!!.tvSongYear.text= if (!movieYear.isNullOrEmpty()) " ${movieYear!!}"
+                else Constants.UNKNOWN
 
-                if (MainActivity.SongsInfoList.get(index).getSongMoviename() != null) {
-                    activitySongPlayerBinding!!.tvMovieName.text = " ${MainActivity.SongsInfoList[index].getSongMoviename()}"
-                }
+                activitySongPlayerBinding!!.tvMovieName.text = if (!MainActivity.SongsInfoList[index].getSongMoviename().isNullOrEmpty()) " ${MainActivity.SongsInfoList[index].getSongMoviename()}"
+                else Constants.UNKNOWN
 
-                if (MainActivity.SongsInfoList.get(index).getSongComposer() != null) {
-                    activitySongPlayerBinding!!.tvSongArtist.text = "" + MainActivity.SongsInfoList.get(index).getSongComposer()
-                }
+                activitySongPlayerBinding!!.tvSongArtist.text =  if (!MainActivity.SongsInfoList[index].getSongComposer().isNullOrEmpty()) " ${MainActivity.SongsInfoList[index].getSongComposer()}"
+                else Constants.UNKNOWN
 
                 activitySongPlayerBinding!!.imvSongImage.setImageResource(R.drawable.default_album_bg)
-                val data = mmr.getEmbeddedPicture()
+
+                val data = mmr.embeddedPicture
 
                 if (data?.isNotEmpty()!!) {
                     val bitmap: Bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
                     activitySongPlayerBinding!!.imvSongImage.setImageBitmap(bitmap)
                     activitySongPlayerBinding!!.imvSongImage.adjustViewBounds = true
                     val bler = BlurBuilder()
-                    activitySongPlayerBinding!!.layoutSongPlayerActivity.background = BitmapDrawable(Resources.getSystem(),bler.blur(context!!, bitmap))
+                    activitySongPlayerBinding!!.layoutSongPlayerActivity.background = BitmapDrawable(Resources.getSystem(), bler.blur(context!!, bitmap))
 
                 } else {
                     activitySongPlayerBinding!!.imvSongImage.setImageResource(R.drawable.default_album_bg)
                 }
 
-                if(AppController.equalizerActivity!=null){
+                if (AppController.equalizerActivity != null) {
 //                EqualizerActivity.getInstance().setupVisualizerFxAndUI()
-                AppController.equalizerActivity?.setupVisualizerFxAndUI()
-                EqualizerActivity .mVisualizer!!.enabled = true}
+                    AppController.equalizerActivity?.setupVisualizerFxAndUI()
+                    EqualizerActivity.mVisualizer!!.enabled = true
+                }
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -240,22 +238,17 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         val model = MainActivity.SongsInfoList[MainActivity.currentSongIndex]
         val bler = BlurBuilder()
         val b = BitmapFactory.decodeResource(context!!.resources, R.drawable.default_album_bg)
-        relativeAlertSnapshot.background = BitmapDrawable(context!!.resources,bler.blur(SongPlayerActivity?.context!!, b))
+        relativeAlertSnapshot.background =
+            BitmapDrawable(context!!.resources, bler.blur(SongPlayerActivity?.context!!, b))
 
         try {
-            tvMovieName.text = "UnKnown"
-            tvSongName.text = "UnKnown"
-            if (model.getSongMoviename() != null) {
-                tvMovieName.text = model.getSongMoviename()
-            }
-            if (model.getSongName() != null) {
-                tvSongName.text = model.getSongName()
-            }
+            tvMovieName.text = if (!model.getSongMoviename().isNullOrEmpty()) model.getSongMoviename() else Constants.UNKNOWN
+            tvSongName.text = if (!model.getSongName().isNullOrEmpty()) model.getSongName() else Constants.UNKNOWN
 
             if (model.getSongImgPath().length != 0 && model.getSongImgPath() != null) {
                 imvSongImage1.setImageURI(Uri.parse(model.getSongImgPath()))
                 val bitmap = BitmapFactory.decodeFile(model.getSongImgPath())
-                relativeAlertSnapshot.background = BitmapDrawable(context!!.resources,bler.blur(SongPlayerActivity?.context!!, bitmap))
+                relativeAlertSnapshot.background = BitmapDrawable(context!!.resources, bler.blur(SongPlayerActivity?.context!!, bitmap))
             }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -291,7 +284,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
 
     fun saveFile(bitmap: Bitmap): Unit {
 
-        val extr = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/Pictures"
+        val extr = Environment.getExternalStorageDirectory().absolutePath + File.separator + "/Pictures"
         val fileName = SimpleDateFormat("yyyyMMddhhmm'_bitmap.jpg'", Locale.US).format(Date())
         val myPath = File(extr, fileName)
         var fos: FileOutputStream? = null
@@ -301,7 +294,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
             fos.flush()
             fos.close()
-            MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Screen", "screen")
+            MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Screen", "screen")
 
             /*Share the images to Shared Apps*/
             val share = Intent(Intent.ACTION_SEND)
@@ -318,7 +311,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         MainActivity.songTotalDurationLabel = findViewById<TextView>(R.id.tvTotalTime) as TextView
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_songplayer, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -329,15 +322,15 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         when (item.itemId) {
 
             R.id.menuSetRingtone -> try {
-                setTone(this@SongPlayerActivity, MainActivity.SongsInfoList.get(MainActivity.currentSongIndex).getSongPath().toString())
+                setTone(this@SongPlayerActivity, MainActivity.SongsInfoList[MainActivity.currentSongIndex].getSongPath())
             } catch (e: Exception) {
                 e.printStackTrace()
             }
 
             R.id.menuSongShare -> {
                 try {
-                    var uri = Uri.parse(MainActivity.SongsInfoList[MainActivity.currentSongIndex].getSongPath())
-                    var share = Intent(Intent.ACTION_SEND)
+                    val uri = Uri.parse(MainActivity.SongsInfoList[MainActivity.currentSongIndex].getSongPath())
+                    val share = Intent(Intent.ACTION_SEND)
                     share.type = "audio/*"
                     share.putExtra(Intent.EXTRA_STREAM, uri)
                     startActivity(Intent.createChooser(share, "Share Sound File"))
@@ -362,29 +355,29 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
 
     fun setTone(context: Context, path: String) {
 
-        if (path == null) {
+        if (path.isNullOrEmpty()) {
             return
         }
-        var file: File = File(path)
-        var contentValues: ContentValues = ContentValues()
-        contentValues.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
-        var filterName: String = path.substring(path.lastIndexOf("/") + 1)
+
+        val file = File(path)
+        val contentValues = ContentValues()
+        contentValues.put(MediaStore.MediaColumns.DATA, file.absolutePath)
+        val filterName: String = path.substring(path.lastIndexOf("/") + 1)
         contentValues.put(MediaStore.MediaColumns.TITLE, filterName)
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3")
         contentValues.put(MediaStore.MediaColumns.SIZE, file.length())
         contentValues.put(MediaStore.Audio.Media.IS_RINGTONE, true)
         var uri: Uri = MediaStore.Audio.Media.getContentUriForPath(path)!!
 
-        var cursor: Cursor = context.getContentResolver()!!.query(uri, null, MediaStore.MediaColumns.DATA + "=?", arrayOf(path), null)!!
-        if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
+        var cursor: Cursor = context.contentResolver!!.query(uri, null, MediaStore.MediaColumns.DATA + "=?", arrayOf(path), null)!!
+        if (cursor != null && cursor.moveToFirst() && cursor.count > 0) {
             var id: String = cursor.getString(0)
             contentValues.put(MediaStore.Audio.Media.IS_RINGTONE, true)
-            context.getContentResolver()!!.update(uri, contentValues, MediaStore.MediaColumns.DATA + "=?", arrayOf(path))
+            context.contentResolver!!.update(uri, contentValues, MediaStore.MediaColumns.DATA + "=?", arrayOf(path))
             val newuri: Uri = ContentUris.withAppendedId(uri, id.toLong())
             try {
 
                 if (checkSystemWritePermission()) {
-
                     RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newuri)
                     Toast.makeText(context, "Set as Ringtone Successfully.", Toast.LENGTH_SHORT).show()
                 } else {
@@ -411,10 +404,10 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         return false
     }
 
-    private fun openAndroidPermissionsMenu(): Unit {
+    private fun openAndroidPermissionsMenu() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-            intent.setData(Uri.parse("package:" + context?.getPackageName()))
+            intent.data=Uri.parse("package:" + context?.packageName)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context?.startActivity(intent)
         }
@@ -434,7 +427,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
                     MainActivity.songTotalDurationLabel = findViewById<TextView>(R.id.tvTotalTime) as TextView
                     //Error pls
                     if (MainActivity.SongsInfoList[MainActivity.currentSongIndex].getSongImgPath() != "null") {
-                        activitySongPlayerBinding!!.imvSongImage.setImageURI(Uri.parse(MainActivity.SongsInfoList.get(MainActivity.currentSongIndex).getSongImgPath()))
+                        activitySongPlayerBinding!!.imvSongImage.setImageURI(Uri.parse(MainActivity.SongsInfoList[MainActivity.currentSongIndex].getSongImgPath()))
                     } else {
                         activitySongPlayerBinding!!.imvSongImage.setImageResource(R.drawable.default_album_bg)
                     }
@@ -445,7 +438,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
                     AppController.mainActivity?.songForward()
                     MainActivity.songTotalDurationLabel = findViewById<TextView>(R.id.tvTotalTime) as TextView
                     //Error pls
-                    if (MainActivity.SongsInfoList.get(MainActivity.currentSongIndex).getSongImgPath() != "null") {
+                    if (MainActivity.SongsInfoList[MainActivity.currentSongIndex].getSongImgPath() != "null") {
                         activitySongPlayerBinding!!.imvSongImage.setImageURI(Uri.parse(MainActivity.SongsInfoList[MainActivity.currentSongIndex].getSongImgPath()))
                     } else {
                         activitySongPlayerBinding!!.imvSongImage.setImageResource(R.drawable.default_album_bg)
@@ -455,9 +448,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
 
                 R.id.imvRepeat -> AppController.mainActivity?.songRepeat()
 
-
                 R.id.imvShuffle -> AppController.mainActivity?.songShuffle()
-
 
                 R.id.imvSongImage -> {
                 }
@@ -467,9 +458,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
                 R.id.imvVolume -> {
 
                     val audioManager: AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                            audioManager.getStreamVolume(AudioManager.STREAM_MUSIC),
-                            AudioManager.FLAG_SHOW_UI)
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_SHOW_UI)
                 }
 
                 R.id.imvEqualizer -> {
@@ -483,4 +472,8 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         }
     }
 
+    override fun onDestroy() {
+        AppController.songPlayerActivity=null
+        super.onDestroy()
+    }
 }

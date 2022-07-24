@@ -16,6 +16,7 @@ class AppController : Application() {
     //Static  methods & variable
     companion object {
         val TAG = AppController::class.java.simpleName
+
         @SuppressLint("StaticFieldLeak")
         @get:Synchronized
         var mainActivity: MainActivity? = null
@@ -33,6 +34,7 @@ class AppController : Application() {
 
         @SuppressLint("StaticFieldLeak")
         var instance: AppController? = null
+
         @SuppressLint("StaticFieldLeak")
         var context: Context? = null
             private set
@@ -42,5 +44,14 @@ class AppController : Application() {
         super.onCreate()
         instance = this
         context = this.applicationContext
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        mainActivity = null
+        mp3PlayerService = null
+        equalizerActivity = null
+        songPlayerActivity = null
+        onlineRadioActivity = null
     }
 }

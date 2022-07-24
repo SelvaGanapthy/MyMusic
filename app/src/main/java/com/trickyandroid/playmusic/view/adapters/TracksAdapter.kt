@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.trickyandroid.playmusic.R
@@ -20,7 +19,8 @@ import com.trickyandroid.playmusic.app.AppController
 import com.trickyandroid.playmusic.models.SongInfoModel
 import java.util.ArrayList
 
-class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>) : RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
+class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>) :
+    RecyclerView.Adapter<TracksAdapter.ViewHolder>() {
     var view: View? = null
     var filterList: ArrayList<SongInfoModel> = dataList
 
@@ -34,7 +34,7 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
 
 
         if (dataList.isEmpty()) {
-            holder.tvSongName?.setText("\t\t\t\t\t\t\t\t    No Data Found!")
+            holder.tvSongName?.text = "\t\t\t\t\t\t\t\t    No Data Found!"
             holder.tvArtistName?.visibility = View.GONE
             holder.tvSongTime?.visibility = View.GONE
             holder.ivSong?.visibility = View.GONE
@@ -46,7 +46,7 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
                 holder.tvSongTime?.visibility = View.VISIBLE
                 holder.ivSong?.visibility = View.VISIBLE
 
-                val model: SongInfoModel = filterList.get(position)
+                val model: SongInfoModel = filterList[position]
                 holder.ivSong?.setImageResource(R.drawable.default_album_bg)
 
                 /*  val art: ByteArray? = MainActivity.getAlbumArt(model.getSongPath())
@@ -89,23 +89,21 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
 //                    }
 //                }
 
-                holder.cardView?.setOnClickListener(object : View.OnClickListener {
-                    override fun onClick(p0: View?) {
-                        MainActivity.SongsInfoList = dataList
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                            AppController.mainActivity?.SongPlay(model.getTrackId())
-                        }
+                holder.cardView?.setOnClickListener {
+                    MainActivity.SongsInfoList = dataList
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        AppController.mainActivity?.SongPlay(model.getTrackId())
                     }
-                })
+                }
 
                 holder.cardView?.setOnLongClickListener(object : View.OnLongClickListener {
                     override fun onLongClick(v: View?): Boolean {
-                        if (MainActivity.songFileDeletePermanent(filterList[position].getId())) {
-                            filterList.removeAt(position)
-                            notifyItemRemoved(position)
-                            notifyItemRangeChanged(position, filterList.size)
-                            Toast.makeText(context,"Song Permanently deleted",Toast.LENGTH_SHORT).show()
-                        }
+//                        if (MainActivity.songFileDeletePermanent(filterList[position].getId())) {
+//                            filterList.removeAt(position)
+//                            notifyItemRemoved(position)
+//                            notifyItemRangeChanged(position, filterList.size)
+//                            Toast.makeText(context,"Song Permanently deleted",Toast.LENGTH_SHORT).show()
+//                        }
                         return true
                     }
                 })
@@ -135,7 +133,7 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
     fun getFilter(): Filter {
 
         return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
                 val charString = charSequence.toString()
 
                 if (charString.isEmpty()) {
@@ -143,7 +141,7 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
                     filterList = dataList
                 } else {
 
-                    val filteredList1 = java.util.ArrayList<SongInfoModel>()
+                    val filteredList1 = ArrayList<SongInfoModel>()
 
                     for (dataModel in dataList) {
 
@@ -156,13 +154,13 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
                     filterList = filteredList1
                 }
 
-                val filterResults = Filter.FilterResults()
+                val filterResults =FilterResults()
                 filterResults.values = filterList
                 return filterResults
             }
 
-            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
-                filterList = filterResults.values as java.util.ArrayList<SongInfoModel>
+            override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
+                filterList = filterResults.values as ArrayList<SongInfoModel>
                 notifyDataSetChanged()
             }
         }

@@ -14,34 +14,28 @@ import android.os.Handler
 import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.viewpager.widget.ViewPager
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util.getUserAgent
+import com.google.android.material.tabs.TabLayoutMediator
 import com.trickyandroid.playmusic.R
 import com.trickyandroid.playmusic.app.AppController
 import com.trickyandroid.playmusic.databinding.ActivityMainBinding
@@ -57,15 +51,16 @@ import com.trickyandroid.playmusic.view.fragement.TracksTab
 import com.trickyandroid.playmusic.view.interfaces.IFragmentListener
 import com.trickyandroid.playmusic.view.interfaces.ISearch
 import com.trickyandroid.playmusic.viewmodel.MainViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.io.File
 import java.io.Serializable
 import java.util.*
-import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFragmentListener, Observer, LifecycleOwner, CommonSearchFragment.CommonRightMenuFragmentListener {
+class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFragmentListener,
+    Observer, LifecycleOwner, CommonSearchFragment.CommonRightMenuFragmentListener {
 
     internal var viewModel: MainViewModel = MainViewModel()
     internal var iSearch: ArrayList<ISearch> = ArrayList()
@@ -89,7 +84,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         var curFmModel: SongInfoModel? = null
 
         @SuppressLint("StaticFieldLeak")
-        var exoPlayer: SimpleExoPlayer? = null
+        var exoPlayer: ExoPlayer? = null
         private val BANDWIDTH_METER: DefaultBandwidthMeter = DefaultBandwidthMeter()
         var uri: Uri? = null
         var currentSongIndex = 0
@@ -122,13 +117,14 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             override fun run() {
                 try {
 
-                    val totalDuration = MainActivity.exoPlayer?.duration!!.toLong()
-                    val currentDuration = MainActivity.exoPlayer!!.currentPosition
+                    val totalDuration = exoPlayer?.duration!!.toLong()
+                    val currentDuration = exoPlayer!!.currentPosition
                     // Displaying Total Duration time
-                    songTotalDurationLabel?.text = "" + MainActivity.utils?.milliSecondsToTimer(totalDuration)
+                    songTotalDurationLabel?.text = " ${utils?.milliSecondsToTimer(totalDuration)}"
 
                     // Displaying time completed playing
-                    songCurrentDurationLabel?.text = "" + MainActivity.utils?.milliSecondsToTimer(currentDuration)
+                    songCurrentDurationLabel?.text =
+                        " ${utils?.milliSecondsToTimer(currentDuration)}"
 
                     //
                     //                // Displaying Total Duration time
@@ -138,7 +134,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                     //                SongPlayerActivity.songCurrentDurationLabel.setText("" + MainActivity.utils.milliSecondsToTimer(currentDuration));
 
                     // Updating progress bar
-                    val progress = MainActivity.utils?.getProgressPercentage(currentDuration, totalDuration)
+                    val progress = utils?.getProgressPercentage(currentDuration, totalDuration)
 
                     //Log.d("Progress", ""+progress);
                     activityMainBinding.songSeekBar.progress = progress!!
@@ -160,7 +156,10 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         }
 
         fun songFileDeletePermanent(id: Int): Boolean {
-            val contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, SongsInfoList[id].getSongFileId().toLong())
+            val contentUri = ContentUris.withAppendedId(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                SongsInfoList[id].getSongFileId().toLong()
+            )
             val file = File(SongsInfoList[id].getSongImgPath())
             val deleted: Boolean = file.delete()
             if (deleted)
@@ -180,17 +179,22 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 
         AppController.mainActivity = this
         context = this
-        activityMainBinding.regFirstDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, activityMainBinding.regRightSlidingFrameLayout)
+        activityMainBinding.regFirstDrawerLayout.setDrawerLockMode(
+            DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+            activityMainBinding.regRightSlidingFrameLayout
+        )
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
-        val params = activityMainBinding.regRightSlidingFrameLayout.getLayoutParams() as DrawerLayout.LayoutParams
+        val params =
+            activityMainBinding.regRightSlidingFrameLayout.layoutParams as DrawerLayout.LayoutParams
         params.width = metrics.widthPixels
-        activityMainBinding.regRightSlidingFrameLayout.setLayoutParams(params)
-        (getSystemService(AUDIO_SERVICE) as AudioManager).registerMediaButtonEventReceiver(ComponentName(this, Mp3Receiver::class.java))
+        activityMainBinding.regRightSlidingFrameLayout.layoutParams = params
+        (getSystemService(AUDIO_SERVICE) as AudioManager).registerMediaButtonEventReceiver(
+            ComponentName(this, Mp3Receiver::class.java))
         activityMainBinding.toolbar.title = ""
         setSupportActionBar(activityMainBinding.toolbar)
         activityMainBinding.layoutSongplay.visibility = View.GONE
-        activityMainBinding.tvMovieName.setSelected(true)
+        activityMainBinding.tvMovieName.isSelected = true
         songCurrentDurationLabel = findViewById<View>(R.id.tvCurrentTime) as TextView
         utils = Utilities()
         activityMainBinding.songSeekBar.setOnSeekBarChangeListener(this@MainActivity)
@@ -239,7 +243,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             })
 
             for (j in 0 until AlbumsList.size) {
-                AlbumsList.get(j).setAlbumnewId(j)
+                AlbumsList[j].setAlbumnewId(j)
             }
 
             /*Artists List initalize Id*/
@@ -254,57 +258,28 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                 ArtistsList[k].setArtistId(k)
             }
 
-            adapter1 = FragmentAdapter(supportFragmentManager, searchText)
+            adapter1 = FragmentAdapter(supportFragmentManager, lifecycle, searchText)
             activityMainBinding.viewPager.adapter = adapter1
-            activityMainBinding.tabLayout.setupWithViewPager(activityMainBinding.viewPager)
+
+            val tabTitle = arrayOf("TRACKS", "ALBUMS", "ARTISTS")
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = tabTitle[position]
+            }.attach()
+//            activityMainBinding.tabLayout.setupWithViewPager(activityMainBinding.viewPager)
             activityMainBinding.tabLayout.getTabAt(0)?.text = "TRACKS"
             activityMainBinding.tabLayout.getTabAt(1)?.text = "ALBUMS"
             activityMainBinding.tabLayout.getTabAt(2)?.text = "ARTISTS"
-            activityMainBinding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                /**
-                 * This method will be invoked when the current page is scrolled, either as part
-                 * of a programmatically initiated smooth scroll or a user initiated touch scroll.
-                 *
-                 * @param position Position index of the first page currently being displayed.
-                 * Page position+1 will be visible if positionOffset is nonzero.
-                 * @param positionOffset Value from [0, 1) indicating the offset from the page at position.
-                 * @param positionOffsetPixels Value in pixels indicating the offset from position.
-                 */
-                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
-                }
-
-                /**
-                 * This method will be invoked when a new page becomes selected. Animation is not
-                 * necessarily complete.
-                 *
-                 * @param position Position index of the new selected page.
-                 */
+            activityMainBinding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     activeTabPos = position
+                    super.onPageSelected(position)
                 }
-
-                /**
-                 * Called when the scroll state changes. Useful for discovering when the user
-                 * begins dragging, when the pager is automatically settling to the current page,
-                 * or when it is fully stopped/idle.
-                 *
-                 * @param state The new scroll state.
-                 * @see ViewPager.SCROLL_STATE_IDLE
-                 *
-                 * @see ViewPager.SCROLL_STATE_DRAGGING
-                 *
-                 * @see ViewPager.SCROLL_STATE_SETTLING
-                 */
-                override fun onPageScrollStateChanged(state: Int) {
-                }
-
             })
-
 
             val linearLayout: LinearLayout = activityMainBinding.tabLayout.getChildAt(0) as LinearLayout
             linearLayout.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
-            val drawable: GradientDrawable = GradientDrawable()
+            val drawable = GradientDrawable()
             drawable.setColor(Color.WHITE)
             drawable.setSize(2, 1)
             linearLayout.dividerPadding = 45
@@ -321,15 +296,17 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
     }
 
 
-    fun getSongsList(): Unit {
+    fun getSongsList() {
 
         id = 0
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val c = applicationContext.contentResolver.query(uri, null, MediaStore.Audio.Media.ALBUM_ARTIST+ " != 0", null, null)
+        val c = applicationContext.contentResolver.query(
+            uri, null, MediaStore.Audio.Media.ALBUM_ARTIST + " != 0",
+            null, null)
 
         runOnUiThread(object : Runnable {
             override fun run() {
-                if (c!!.moveToFirst() != false && c.moveToFirst()) {
+                if (c!!.moveToFirst() && c.moveToFirst()) {
                     do {
                         try {
                             val model = SongInfoModel()
@@ -363,7 +340,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                             e.printStackTrace()
                         }
 
-                    } while (c.moveToNext() != false)
+                    } while (c.moveToNext())
                     c.close()
                 }
 
@@ -396,12 +373,20 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 
 
     /*FragmentAdapter class*/
-    inner class FragmentAdapter(fm: FragmentManager, var mSearchTerm: String?) : FragmentStatePagerAdapter(fm) {
+    inner class FragmentAdapter(fm: FragmentManager, lifecycle: Lifecycle, var mSearchTerm: String?) :
+        FragmentStateAdapter(fm, lifecycle) {
 
         var tabTitle = arrayOf("TRACKS", "ALBUMS", "ARTISTS")
 
-        override fun getItem(position: Int): Fragment {
+        fun setTextQueryChanged(newText: String): Unit {
+            mSearchTerm = newText
+        }
 
+        override fun getItemCount(): Int {
+            return tabTitle.size
+        }
+
+        override fun createFragment(position: Int): Fragment {
             when (position) {
 
                 0 -> {
@@ -434,18 +419,6 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             return null!!
         }
 
-        override fun getPageTitle(position: Int): CharSequence {
-            return tabTitle[position]
-        }
-
-        fun setTextQueryChanged(newText: String): Unit {
-            mSearchTerm = newText
-        }
-
-        override fun getCount(): Int {
-            return tabTitle.size
-        }
-
     }
 
     override fun addiSearch(iSearch: ISearch) {
@@ -456,11 +429,15 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         this.iSearch.remove(iSearch)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    fun SongPlay(index: Int): Unit {
+    fun SongPlay(index: Int) {
 
         try {
-
             SongsInfoList = when (activeTabPos) {
                 0 -> TracksList
                 1 -> AlbumsList
@@ -471,43 +448,40 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             isFmPlay = false
             activityMainBinding.layoutSongplay.visibility = View.VISIBLE
             currentSongIndex = index
-//            uri = Uri.parse(SongsInfoList.get(index).getSongPath().toString())
-
-            startExoplayer(SongsInfoList.get(index).getSongPath())
+            /*start song*/
+            startExoplayer(SongsInfoList[index].getSongPath())
 
             // set Progress bar values
-            activityMainBinding.songSeekBar.setProgress(0)
-            activityMainBinding.songSeekBar.setMax(100)
+            activityMainBinding.songSeekBar.progress = 0
+            activityMainBinding.songSeekBar.max = 100
             SongPlayerActivity.songDetails(index)
             AppController.albumSongActivity?.songDetails(index)
 
-            // Updating progress bar
+            // Updating progress bar & UI
             updateProgressBar()
             activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
-            activityMainBinding.tvSongName.setText("${SongsInfoList.get(index).getSongName()} Song .")
-            activityMainBinding.tvMovieName.setText(SongsInfoList.get(currentSongIndex).getSongMoviename())
-
+            activityMainBinding.tvSongName.text = "${SongsInfoList[index].getSongName()} Song ."
+            activityMainBinding.tvMovieName.text =
+                SongsInfoList[currentSongIndex].getSongMoviename()
             songTotalDurationLabel = findViewById<TextView>(R.id.tvTotalTime) as TextView
-            songTotalDurationLabel?.setText(SongsInfoList.get(currentSongIndex).getSongTime())
-
-            activityMainBinding.imvSongImage.setImageURI(Uri.parse(SongsInfoList.get(index).getSongImgPath()))
+            songTotalDurationLabel?.text = SongsInfoList[currentSongIndex].getSongTime()
+            activityMainBinding.imvSongImage.setImageURI(Uri.parse(SongsInfoList[index].getSongImgPath()))
 
             val intent = Intent(applicationContext, Mp3PlayerService::class.java)
-            intent.putExtra("songTitle", SongsInfoList.get(index).getSongName())
-            intent.putExtra("movieName", SongsInfoList.get(currentSongIndex).getSongMoviename())
-            intent.putExtra("songPath", SongsInfoList.get(index).getSongPath())
+            intent.putExtra("songTitle", SongsInfoList[index].getSongName())
+            intent.putExtra("movieName", SongsInfoList[currentSongIndex].getSongMoviename())
+            intent.putExtra("songPath", SongsInfoList[index].getSongPath())
             startService(intent)
 
             AppController.songPlayerActivity?.initTotalTime()
-            songTotalDurationLabel?.setText(SongsInfoList.get(currentSongIndex).getSongTime())
+            songTotalDurationLabel?.text = SongsInfoList[currentSongIndex].getSongTime()
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-
         try {
-            exoPlayer?.addListener(object : Player.DefaultEventListener() {
+            exoPlayer?.addListener(object : Player.Listener {
                 override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                     if (Player.STATE_ENDED == playbackState) {
                         if (isRepeat) {
@@ -536,38 +510,33 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
 
-    fun startExoplayer(songpath: String) {
+    private fun startExoplayer(songpath: String) {
 
         if (exoPlayer != null) {
             exoPlayer?.stop()
             exoPlayer?.release()
         }
 
-        val trackSelectionFactory: AdaptiveTrackSelection.Factory = AdaptiveTrackSelection.Factory(BANDWIDTH_METER)
-        val trackSelector: DefaultTrackSelector = DefaultTrackSelector(trackSelectionFactory)
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(applicationContext, trackSelector)
-
-        val dataSourceFactory = DefaultDataSourceFactory(this, getUserAgent(this, javaClass.simpleName), BANDWIDTH_METER)
-
-        val mediaSource = ExtractorMediaSource.Factory(dataSourceFactory)
-                .setExtractorsFactory(DefaultExtractorsFactory())
-                .createMediaSource(Uri.parse(songpath))
-
-        exoPlayer!!.prepare(mediaSource)
+        exoPlayer = ExoPlayer.Builder(applicationContext).build()
+        val dataSourceFactory = DefaultDataSourceFactory(
+            this,
+            getUserAgent(this, javaClass.simpleName),
+            BANDWIDTH_METER
+        )
+        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(MediaItem.fromUri(Uri.parse(songpath)))
+        exoPlayer!!.setMediaSource(mediaSource)
+        exoPlayer!!.prepare()
         exoPlayer!!.playWhenReady = true
     }
 
-    fun PlayorPause(): Unit {
-
+    fun PlayorPause() {
         try {
-
             if (exoPlayer == null)
                 return
-
 
             var intent: Intent
             if (exoPlayer?.playWhenReady!!) {
@@ -575,18 +544,19 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                 activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 AppController.albumSongActivity?.imvPlayrPause?.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 try {
-                    if (SongPlayerActivity.activitySongPlayerBinding!=null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                    if (SongPlayerActivity.activitySongPlayerBinding != null && SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                         SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
-
 
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                if (!SongsInfoList.isEmpty()) {
-                    intent = Intent(this@MainActivity.applicationContext, Mp3PlayerService::class.java)
-                    intent.putExtra("songTitle", SongsInfoList.get(currentSongIndex).getSongName())
-                    intent.putExtra("movieName", SongsInfoList.get(currentSongIndex).getSongMoviename())
-                    intent.putExtra("songPath", SongsInfoList.get(currentSongIndex).getSongImgPath())
+
+                if (SongsInfoList.isNotEmpty()) {
+                    intent =
+                        Intent(this@MainActivity.applicationContext, Mp3PlayerService::class.java)
+                    intent.putExtra("songTitle", SongsInfoList[currentSongIndex].getSongName())
+                    intent.putExtra("movieName", SongsInfoList[currentSongIndex].getSongMoviename())
+                    intent.putExtra("songPath", SongsInfoList[currentSongIndex].getSongImgPath())
                     this@MainActivity.startService(intent)
                 }
 
@@ -597,17 +567,18 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                 activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
                 AppController.albumSongActivity?.imvPlayrPause?.setImageResource(R.drawable.ic_pause_black_24dp)
                 try {
-                    if (SongPlayerActivity.activitySongPlayerBinding!=null &&!SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
+                    if (SongPlayerActivity.activitySongPlayerBinding != null && !SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle())
                         SongPlayerActivity.activitySongPlayerBinding!!.fabPlaynPause.toggle()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
 
-                if (!SongsInfoList.isEmpty()) {
-                    intent = Intent(this@MainActivity.applicationContext, Mp3PlayerService::class.java)
-                    intent.putExtra("songTitle", SongsInfoList.get(currentSongIndex).getSongName())
-                    intent.putExtra("movieName", SongsInfoList.get(currentSongIndex).getSongMoviename())
-                    intent.putExtra("songPath", SongsInfoList.get(currentSongIndex).getSongImgPath())
+                if (SongsInfoList.isNotEmpty()) {
+                    intent =
+                        Intent(this@MainActivity.applicationContext, Mp3PlayerService::class.java)
+                    intent.putExtra("songTitle", SongsInfoList[currentSongIndex].getSongName())
+                    intent.putExtra("movieName", SongsInfoList[currentSongIndex].getSongMoviename())
+                    intent.putExtra("songPath", SongsInfoList[currentSongIndex].getSongImgPath())
                     this@MainActivity.startService(intent)
                 }
             }
@@ -683,7 +654,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 
     }
 
-    fun songRepeat(): Unit {
+    fun songRepeat() {
         if (isRepeat) {
             isRepeat = false
             Toast.makeText(applicationContext, "Repeat is OFF", Toast.LENGTH_SHORT).show()
@@ -733,12 +704,12 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 
             activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
 
-            if (!SongsInfoList.isEmpty()) {
+            if (SongsInfoList.isNotEmpty()) {
 
                 intent = Intent(this@MainActivity.applicationContext, Mp3PlayerService::class.java)
-                intent.putExtra("songTitle", SongsInfoList.get(currentSongIndex).getSongName())
-                intent.putExtra("movieName", SongsInfoList.get(currentSongIndex).getSongMoviename())
-                intent.putExtra("songPath", SongsInfoList.get(currentSongIndex).getSongImgPath())
+                intent.putExtra("songTitle", SongsInfoList[currentSongIndex].getSongName())
+                intent.putExtra("movieName", SongsInfoList[currentSongIndex].getSongMoviename())
+                intent.putExtra("songPath", SongsInfoList[currentSongIndex].getSongImgPath())
                 this@MainActivity.startService(intent)
 
             }
@@ -746,7 +717,6 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             e.printStackTrace()
         }
     }
-
 
     fun SongPause(): Unit {
         try {
@@ -763,10 +733,11 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 
                 activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 if (!SongsInfoList.isEmpty()) {
-                    intent = Intent(this@MainActivity.applicationContext, Mp3PlayerService::class.java)
+                    intent =
+                        Intent(this@MainActivity.applicationContext, Mp3PlayerService::class.java)
                     intent.putExtra("songTitle", SongsInfoList.get(currentSongIndex).getSongName())
-                    intent.putExtra("movieName", SongsInfoList.get(currentSongIndex).getSongMoviename())
-                    intent.putExtra("songPath", SongsInfoList.get(currentSongIndex).getSongImgPath())
+                    intent.putExtra("movieName", SongsInfoList[currentSongIndex].getSongMoviename())
+                    intent.putExtra("songPath", SongsInfoList[currentSongIndex].getSongImgPath())
                     this@MainActivity.startService(intent)
                 }
             }
@@ -780,22 +751,19 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
     override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
     }
 
-    override fun onStartTrackingTouch(p0: SeekBar?) {
-        MainActivity.mHandler.removeCallbacks(mUpdateTimeTask)
+    override fun onStartTrackingTouch(p0: SeekBar?) = mHandler.removeCallbacks(mUpdateTimeTask)
 
-    }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
         try {
-
             mHandler.removeCallbacks(mUpdateTimeTask)
-            var totalDuration = MainActivity.exoPlayer?.duration!!.toInt()
-            var currentPosition = utils?.progressToTimer(seekBar?.progress!!, totalDuration)!!
+            val totalDuration = exoPlayer?.duration!!.toInt()
+            val currentPosition = utils?.progressToTimer(seekBar?.progress!!, totalDuration)!!
 
             // forward or backward to certain seconds
-            MainActivity.exoPlayer!!.seekTo(currentPosition.toLong())
+           exoPlayer!!.seekTo(currentPosition.toLong())
             // update timer progress again
-            MainActivity.updateProgressBar()
+           updateProgressBar()
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -848,17 +816,9 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = getMenuInflater()
-        getMenuInflater().inflate(R.menu.menu, menu)
-        return true
-    }
-
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        val id = item.getItemId()
+        val id = item.itemId
 
         if (id == R.id.menuFmRadio) {
             startActivity(Intent(this@MainActivity, OnlineRadioActivity::class.java))
@@ -866,16 +826,16 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         }
 
         if (id == R.id.menuAppShare) {
-            val i: Intent = Intent()
-            i.setAction(Intent.ACTION_SEND)
-            i.putExtra(Intent.EXTRA_TEXT, "I suggest this app for best Music Player : https://play.google.com/store/apps/details?id=" + context!!.packageName)
-            i.setType("text/plain")
+            val i = Intent()
+            i.action = Intent.ACTION_SEND
+            i.putExtra(Intent.EXTRA_TEXT,
+                "I suggest this app for best Music Player : https://play.google.com/store/apps/details?id=" + context!!.packageName)
+            i.type = "text/plain"
             startActivity(i)
             return true
         }
         return super.onOptionsItemSelected(item)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -900,6 +860,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         (this.applicationContext?.getSystemService("notification") as NotificationManager).cancelAll()
         stopService(Intent(applicationContext, Mp3PlayerService::class.java))
         super.onDestroy()
+        System.exit(0)
     }
 
     fun initTotalsongTime() {
@@ -926,12 +887,18 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 //                    bundle.putSerializable("artist", SongsInfoList)
                     activityMainBinding.regFirstDrawerLayout.openDrawer(activityMainBinding.regRightSlidingFrameLayout)
                     //clear backs tack when navigating from slide menu
-                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStack(
+                        null,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    )
                     mFragmentManager = supportFragmentManager
                     mFragmentTransaction = mFragmentManager?.beginTransaction()
                     val rightMenu_Fragment = CommonSearchFragment()
-                    rightMenu_Fragment.setArguments(bundle)
-                    mFragmentTransaction?.replace(R.id.reg_right_sliding_frameLayout, rightMenu_Fragment)
+                    rightMenu_Fragment.arguments = bundle
+                    mFragmentTransaction?.replace(
+                        R.id.reg_right_sliding_frameLayout,
+                        rightMenu_Fragment
+                    )
                     mFragmentTransaction?.addToBackStack(null)
                     mFragmentTransaction?.commit()
                 }
@@ -947,8 +914,8 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onItemSelect(flag: Int, key: String?, value: String?) {
 
-            if (activityMainBinding.regFirstDrawerLayout.isDrawerOpen(activityMainBinding.regRightSlidingFrameLayout))
-                activityMainBinding.regFirstDrawerLayout.closeDrawer(activityMainBinding.regRightSlidingFrameLayout)
+        if (activityMainBinding.regFirstDrawerLayout.isDrawerOpen(activityMainBinding.regRightSlidingFrameLayout))
+            activityMainBinding.regFirstDrawerLayout.closeDrawer(activityMainBinding.regRightSlidingFrameLayout)
 
         try {
             lifecycleScope.launch {

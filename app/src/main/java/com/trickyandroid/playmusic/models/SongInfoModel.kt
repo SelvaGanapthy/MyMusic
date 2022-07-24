@@ -1,6 +1,5 @@
 package com.trickyandroid.playmusic.models
 
-import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -36,65 +35,55 @@ class SongInfoModel() : Parcelable {
         songImgPath = parcel.readString()
     }
 
-    fun getAlbumnewId(): Int {
-        return AlbumnewId
-    }
+    fun getAlbumnewId(): Int = AlbumnewId
 
     fun setAlbumnewId(albumnewId: Int) {
         AlbumnewId = albumnewId
     }
 
-    fun getArtistId(): Int {
-        return ArtistId
-    }
+    fun getArtistId(): Int = ArtistId
+
 
     fun setArtistId(artistId: Int) {
         ArtistId = artistId
     }
 
-    fun getTrackId(): Int {
-        return TrackId
-    }
+    fun getTrackId(): Int = TrackId
 
     fun setTrackId(trackId: Int) {
         TrackId = trackId
     }
 
-    fun getId(): Int {
-        return Id
-    }
+    fun getId(): Int =Id
+
 
     fun setId(id: Int) {
         Id = id
     }
 
-    fun getAlbumId(): Long {
-        return albumId
-    }
+    fun getAlbumId(): Long = albumId
+
 
     fun setAlbumId(albumId: Long) {
         this.albumId = albumId
     }
 
-    fun getSongName(): String {
-        return songName!!
-    }
+    fun getSongName(): String = songName!!
+
 
     fun setSongName(songName: String) {
         this.songName = songName
     }
 
-    fun getSongArtist(): String {
-        return songArtist!!
-    }
+    fun getSongArtist(): String =songArtist!!
+
 
     fun setSongArtist(songArtist: String) {
         this.songArtist = songArtist
     }
 
-    fun getSongTime(): String {
-        return songTime!!
-    }
+    fun getSongTime(): String =songTime!!
+
 
     fun getSongFileId(): String {
         return SongFileId!!
@@ -105,17 +94,15 @@ class SongInfoModel() : Parcelable {
         this.songTime = songTime
     }
 
-    fun getSongComposer(): String {
-        return songComposer!!
-    }
+    fun getSongComposer(): String = songComposer!!
+
 
     fun setSongComposer(songComposer: String) {
         this.songComposer = songComposer
     }
 
-    fun getSongMoviename(): String {
-        return songMoviename!!
-    }
+    fun getSongMoviename(): String = songMoviename!!
+
 
 
     fun setSongFileId(SongFileId: String) {
@@ -127,18 +114,16 @@ class SongInfoModel() : Parcelable {
         this.songMoviename = songMoviename
     }
 
-    fun getSongPath(): String {
-        return songPath!!
-    }
+    fun getSongPath(): String =songPath!!
+
 
     fun setSongPath(songPath: String) {
         this.songPath = songPath
     }
 
 
-    fun getSongImgPath(): String {
-        return songImgPath!!
-    }
+    fun getSongImgPath(): String =songImgPath!!
+
 
     fun setSongImgPath(songImgPath: String) {
         this.songImgPath = songImgPath
