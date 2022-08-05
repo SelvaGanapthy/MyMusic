@@ -19,6 +19,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.trickyandroid.playmusic.view.activitys.MainActivity
 import com.trickyandroid.playmusic.anim.AnimationUtils
 import com.trickyandroid.playmusic.app.AppController
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>) :
@@ -37,19 +39,14 @@ class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             val model: SongInfoModel = filterList[position]
-            if (model.getSongImgPath() != null) {
+            if (!model.getSongImgPath().isNullOrEmpty()) {
 
                 try {
-//                    Picasso.get().load(Uri.parse("file://" + model.getSongImgPath()))
-//                            .error(R.drawable.default_album_bg).into(holder.ivSong)
-
                     Glide.with(context)
                         .load(Uri.parse(model.getSongImgPath()))
                         .error(R.drawable.default_album_bg)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .into(holder?.ivSong!!)
-
-
+                        .into(holder.ivSong!!)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -91,7 +88,7 @@ class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>)
     fun getFilter(): Filter {
 
         return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
                 val charString = charSequence.toString()
 
                 if (charString.isEmpty()) {
@@ -103,7 +100,7 @@ class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>)
 
                     for (dataModel in dataList) {
 
-                        if (dataModel.getSongName().toLowerCase().contains(charString) || dataModel.getSongMoviename().toLowerCase().contains(charString)) {
+                        if (dataModel.getSongName().lowercase().contains(charString) || dataModel.getSongMoviename().lowercase().contains(charString)) {
 
                             filteredList1.add(dataModel)
                         }
@@ -117,7 +114,7 @@ class SongsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>)
                 return filterResults
             }
 
-            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
+            override fun publishResults(charSequence: CharSequence, filterResults:FilterResults) {
                 filterList = filterResults.values as java.util.ArrayList<SongInfoModel>
                 notifyDataSetChanged()
             }

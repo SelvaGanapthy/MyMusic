@@ -94,7 +94,7 @@ class AlbumsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
     fun getFilter(): Filter {
 
         return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
                 val charString = charSequence.toString()
 
                 if (charString.isEmpty()) {
@@ -106,7 +106,7 @@ class AlbumsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
 
                     for (dataModel in dataList) {
 
-                        if (dataModel.getSongMoviename().toLowerCase().contains(charString)) {
+                        if (dataModel.getSongMoviename().lowercase().contains(charString)) {
                             filteredList1.add(dataModel)
                         }
                     }

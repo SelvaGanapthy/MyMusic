@@ -25,7 +25,7 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
     var filterList: ArrayList<SongInfoModel> = dataList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        view = LayoutInflater.from(context).inflate(R.layout.songs_adapter, parent, false);
+        view = LayoutInflater.from(context).inflate(R.layout.songs_adapter, parent, false)
         return ViewHolder(view)
     }
 
@@ -145,7 +145,7 @@ class TracksAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>
 
                     for (dataModel in dataList) {
 
-                        if (dataModel.getSongName().toLowerCase().contains(charString) || dataModel.getSongMoviename().toLowerCase().contains(charString)) {
+                        if (dataModel.getSongName().lowercase().contains(charString) || dataModel.getSongMoviename().lowercase().contains(charString)) {
 
                             filteredList1.add(dataModel)
                         }

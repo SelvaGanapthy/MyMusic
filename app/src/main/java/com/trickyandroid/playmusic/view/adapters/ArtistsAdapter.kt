@@ -115,7 +115,7 @@ class ArtistsAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
 
                     for (dataModel in dataList) {
 
-                        if (dataModel.getSongName().toLowerCase().contains(charString) || dataModel.getSongComposer().toLowerCase().contains(charString)) {
+                        if (dataModel.getSongName().lowercase().contains(charString) || dataModel.getSongComposer().lowercase().contains(charString)) {
 
                             filteredList1.add(dataModel)
                         }

@@ -6,6 +6,7 @@ import java.io.File
 import java.util.*
 
 object StringUtility {
+
     var REMOVE_LIST = arrayOf("www.songs.pk", "www.", ".com", ".pl", ".pk", ".org", ".co.in", "~requested~", "(musictub)", ".mp3", EnvironmentCompat.MEDIA_UNKNOWN, "()", "\\[\\]")
     var REPLACE_LIST = arrayOfNulls<Array<String>>(6)
     val PREF_APPID = "radio"

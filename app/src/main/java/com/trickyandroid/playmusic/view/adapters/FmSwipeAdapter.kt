@@ -2,7 +2,6 @@ package com.trickyandroid.playmusic.view.adapters
 
 import android.content.Context
 import android.graphics.Color
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,30 +16,28 @@ import com.trickyandroid.playmusic.models.SongInfoModel
 
 class FmSwipeAdapter(var context: Context, var dataList: ArrayList<SongInfoModel>) : RecyclerView.Adapter<FmSwipeAdapter.ViewHolder>() {
 
-    var view: View? = null
-    var filterList: ArrayList<SongInfoModel> = dataList
+    private var view: View? = null
+    private var filterList: ArrayList<SongInfoModel> = dataList
 
-    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): FmSwipeAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         view = LayoutInflater.from(context).inflate(R.layout.songs_adapter, parent, false)
         return ViewHolder(view!!)
     }
 
     override fun getItemCount(): Int = dataList.size
 
-    override fun onBindViewHolder(p0: FmSwipeAdapter.ViewHolder, p1: Int) {
+    override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
         if (!dataList.isEmpty()) {
             val model: SongInfoModel = filterList.get(p1)
-            p0.tvMovieName?.setText(model.getSongName())
-            p0.tvArtist?.setText(model.getSongMoviename())
-            Glide.with(context)
-                    .load(model.getSongImgPath())
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .into(p0.ivSong!!)
-            p0.cardView?.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
+            p0.tvMovieName?.text=model.getSongName()
+            p0.tvArtist?.text=model.getSongMoviename()
+            Glide.with(context).load(model.getSongImgPath())
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .into(p0.ivSong!!)
+            p0.cardView?.setOnClickListener{
                     AppController.onlineRadioActivity?.startRadio(model)
                 }
-            })
+
         }
     }
 
@@ -53,7 +50,6 @@ class FmSwipeAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
     }
 
 
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvArtist: TextView? = null
         var tvMovieName: TextView? = null
@@ -63,14 +59,14 @@ class FmSwipeAdapter(var context: Context, var dataList: ArrayList<SongInfoModel
         var tvSongTime: TextView? = null
 
         init {
-            tvMovieName = itemView?.findViewById<View>(R.id.tvMainName) as TextView
-            tvArtist = itemView?.findViewById<View>(R.id.tvSubName) as TextView
+            tvMovieName = itemView.findViewById<View>(R.id.tvMainName) as TextView
+            tvArtist = itemView.findViewById<View>(R.id.tvSubName) as TextView
             tvSongTime = itemView.findViewById<View>(R.id.tvSongTime) as TextView
-            tvSongTime?.visibility=View.GONE
-            cardView = itemView?.findViewById<View>(R.id.cardView) as CardView
+            tvSongTime?.visibility = View.GONE
+            cardView = itemView.findViewById<View>(R.id.cardView) as CardView
             cardView?.setBackgroundResource(R.drawable.card_bg1)
-            ivSong = itemView?.findViewById<View>(R.id.ivSong) as ImageView
-            lineCode = itemView?.findViewById<View>(R.id.lineCode) as View
+            ivSong = itemView.findViewById<View>(R.id.ivSong) as ImageView
+            lineCode = itemView.findViewById<View>(R.id.lineCode) as View
             lineCode?.setBackgroundColor(Color.TRANSPARENT)
         }
     }

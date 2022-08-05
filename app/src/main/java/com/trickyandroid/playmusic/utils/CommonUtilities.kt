@@ -14,7 +14,7 @@ object CommonUtilities {
             val imm: InputMethodManager =  context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(context.window.decorView.windowToken, 0)
         } catch (e: Exception) {
-//            ExceptionTrack.getInstance().TrackLog(e);
+//            ExceptionTrack.getInstance().TrackLog(e)
         }
     }
 
@@ -26,7 +26,7 @@ object CommonUtilities {
                 inputMethodManager.showSoftInput(editText, 0)
             }, 100)
         } catch (e: Exception) {
-//            ExceptionTrack.getInstance().TrackLog(e);
+//            ExceptionTrack.getInstance().TrackLog(e)
         }
 
     }
@@ -35,21 +35,21 @@ object CommonUtilities {
     fun showProgressDialog(activity: Context?, msg: String?) {
         try {
             cancelProgressDialog(activity)
-            if (CommonUtilities.dialog == null) {
-                CommonUtilities.dialog = ProgressDialog(activity)
+            if (dialog == null) {
+                dialog = ProgressDialog(activity)
                 dialog?.setMessage(msg)
-                CommonUtilities.dialog?.setIndeterminate(true)
-                CommonUtilities.dialog?.setCancelable(false)
+                dialog?.setIndeterminate(true)
+                dialog?.setCancelable(false)
                 //if (!((Activity) activity).isFinishing())
-                CommonUtilities.dialog?.show()
+                dialog?.show()
             } else {
-                if (!dialog?.isShowing()!!) {
-                    CommonUtilities.dialog = ProgressDialog(activity)
-                    CommonUtilities.dialog?.setMessage(msg)
-                    CommonUtilities.dialog?.setIndeterminate(true)
-                    CommonUtilities.dialog?.setCancelable(false)
+                if (!dialog?.isShowing!!) {
+                   dialog = ProgressDialog(activity)
+                    dialog?.setMessage(msg)
+                    dialog?.setIndeterminate(true)
+                    dialog?.setCancelable(false)
                     //if (!((Activity) activity).isFinishing())
-                    CommonUtilities.dialog?.show()
+                    dialog?.show()
                 }
             }
         } catch (e: java.lang.Exception) {

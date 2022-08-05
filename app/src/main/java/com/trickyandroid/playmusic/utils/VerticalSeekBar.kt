@@ -9,11 +9,12 @@ import android.widget.SeekBar
 
 @SuppressLint("AppCompatCustomView")
 class VerticalSeekBar : SeekBar {
+
     constructor(context: Context?) : super(context) {}
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {}
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {}
 
-    fun mannualChange() {
+   internal fun mannualChange() {
         super.onSizeChanged(height, width, 0, 0)
     }
 

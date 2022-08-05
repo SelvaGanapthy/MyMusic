@@ -7,8 +7,10 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.media.MediaMetadata
 import android.media.MediaMetadataRetriever
 import android.os.Build
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -17,6 +19,7 @@ import com.trickyandroid.playmusic.R
 import com.trickyandroid.playmusic.service.Mp3PlayerService
 import com.trickyandroid.playmusic.view.activitys.MainActivity
 import com.trickyandroid.playmusic.view.activitys.OnlineRadioActivity
+import okhttp3.internal.notify
 
 
 class MediaNotificationManager constructor(val service: Mp3PlayerService) {
@@ -91,26 +94,28 @@ class MediaNotificationManager constructor(val service: Mp3PlayerService) {
         val pendingIntent = PendingIntent.getActivity(service, 0, i,  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationView = RemoteViews(service.packageName, R.layout.notificationbig_mediacontroller)
         notificationManager!!.cancel(NOTIFICATIONID)
+        mediaSessionCompat =  MediaSessionCompat(service, "tag")
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val manager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            mediaSessionCompat =  MediaSessionCompat(service, "tag")
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val manager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//            mediaSessionCompat =  MediaSessionCompat(service, "tag")
             mediaSessionCompat?.isActive=true
-            /* Below coding for above android 12 notification specify
+//        mediaSessionCompat?.
+//            /* Below coding for above android 12 notification specify
             mediaSessionCompat?.setMetadata(
                  MediaMetadataCompat.Builder()
-                    .putString(MediaMetadata.METADATA_KEY_TITLE,"")
-                    .putString(MediaMetadata.METADATA_KEY_ARTIST, "")
+                    .putString(MediaMetadata.METADATA_KEY_TITLE,songName)
+                    .putString(MediaMetadata.METADATA_KEY_ARTIST,movieName)
                     .build()
-            )*/
-            val channel = NotificationChannel(PRIMARYCHANNEL, PRIMARYCHANNELNAME, NotificationManager.IMPORTANCE_HIGH)
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//               channel.importance=
-            }
-
-            manager.createNotificationChannel(channel)
-        }
+            )
+//            val channel = NotificationChannel(PRIMARYCHANNEL, PRIMARYCHANNELNAME, NotificationManager.IMPORTANCE_HIGH)
+//            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+////               channel.importance=
+//            }
+//
+////            manager.createNotificationChannel(channel)
+//        }
 
         val builder: NotificationCompat.Builder =
             NotificationCompat.Builder(service, PRIMARYCHANNEL)
@@ -120,7 +125,7 @@ class MediaNotificationManager constructor(val service: Mp3PlayerService) {
                 .setLargeIcon(bitmap)
                 .setContentIntent(pendingIntent)
 //                .setContent(notificationView)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setSmallIcon(android.R.drawable.stat_sys_headset)
                 .addAction(R.drawable.ic_baseline_skip_previous_24, "previous", previousAction)
                 .addAction(playnPauseicon, "pause", action)
@@ -132,8 +137,9 @@ class MediaNotificationManager constructor(val service: Mp3PlayerService) {
                     androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSessionCompat?.sessionToken)
                         .setShowActionsInCompactView(0, 1, 2,3)
-                        .setShowCancelButton(false)
+                        .setShowCancelButton(true)
                         .setCancelButtonIntent(stopAction)
+
 //                        .buildIntoRemoteViews(notificationView)
                 )
 
