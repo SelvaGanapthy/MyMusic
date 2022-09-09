@@ -756,6 +756,16 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         super.onStart()
     }
 
+    @Subscribe
+    fun onEvent(status: String) {
+        when (status) {
+//            PlaybackStatus.LOADING -> {
+//            }
+//            PlaybackStatus.ERROR -> Toast.makeText(this, R.string.no_stream, Toast.LENGTH_SHORT).show()
+        }
+//        trigger.setImageResource(if (status == PlaybackStatus.PLAYING) R.drawable.ic_pause_black else R.drawable.ic_play_arrow_black)
+    }
+
     @SuppressLint("WrongConstant")
     override fun onBackPressed() {
 
