@@ -213,7 +213,7 @@ class OnlineRadioActivity : AppCompatActivity() {
             var taskStackBuilder: TaskStackBuilder = TaskStackBuilder.create(this)
             taskStackBuilder.addParentStack(MainActivity::class.java)
             taskStackBuilder.addNextIntent(i)
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             startActivity(i)
         } else
             super.onBackPressed()

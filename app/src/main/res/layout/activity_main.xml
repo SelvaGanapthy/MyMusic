@@ -49,7 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:onClick="@{(v)->viewModel.onClick(v)}"
+                        android:onClick="update"
                         app:srcCompat="@drawable/ic_baseline_search_24" />
                     <!--                    <androidx.appcompat.widget.SearchView-->
                     <!--                        android:id="@+id/searchView"-->
@@ -113,7 +113,7 @@
                 android:layout_height="55dp"
                 android:layout_gravity="center_horizontal|bottom"
                 android:background="#ff00"
-                android:onClick="@{(v)->viewModel.onClick(v)}"
+                android:onClick="update"
                 android:orientation="vertical"
                 android:padding="1dp">
 
@@ -209,7 +209,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:gravity="center"
-                        android:onClick="@{(v)->viewModel.onClick(v)}"
+                        android:onClick="update"
                         app:srcCompat="@drawable/ic_pause_black_24dp" />
 
                     <ImageView
@@ -219,7 +219,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:onClick="@{(v)->viewModel.onClick(v)}"
+                        android:onClick="update"
                         android:visibility="gone"
                         app:srcCompat="@drawable/ic_skip_previous_white_24dp" />
 
@@ -230,7 +230,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:onClick="@{(v)->viewModel.onClick(v)}"
+                        android:onClick="update"
                         android:visibility="gone"
                         app:srcCompat="@drawable/ic_skip_next_white_24dp" />
 

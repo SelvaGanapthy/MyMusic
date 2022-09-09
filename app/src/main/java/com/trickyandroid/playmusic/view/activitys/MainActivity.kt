@@ -60,7 +60,7 @@ import java.io.Serializable
 import java.util.*
 
 class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFragmentListener,
-    Observer, LifecycleOwner, CommonSearchFragment.CommonRightMenuFragmentListener {
+    LifecycleOwner, CommonSearchFragment.CommonRightMenuFragmentListener {
 
     internal var viewModel: MainViewModel = MainViewModel()
     internal var iSearch: ArrayList<ISearch> = ArrayList()
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         /*DataBinding*/
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         activityMainBinding.viewModel = viewModel
-        viewModel.addObserver(this)
+//        viewModel.addObserver(this)
         lifecycle.addObserver(viewModel)
 
         AppController.mainActivity = this
@@ -198,23 +198,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         songCurrentDurationLabel = findViewById<View>(R.id.tvCurrentTime) as TextView
         utils = Utilities()
         activityMainBinding.songSeekBar.setOnSeekBarChangeListener(this@MainActivity)
-//        setSupportActionBar(toolbar!!)
         try {
-//            activityMainBinding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//
-//                override fun onQueryTextSubmit(query: String): Boolean {
-//                    return false
-//                }
-//
-//                override fun onQueryTextChange(newText: String): Boolean {
-//                    searchText = newText
-//                    adapter1?.setTextQueryChanged(newText)
-//                    for (iSearchLocal in iSearch)
-//                        iSearchLocal.onTextQuery(newText)
-//                    return true
-//                }
-//            })
-
             if (fmAndSongsList.isEmpty()) {
                 getSongsList()
             }
@@ -265,7 +249,6 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 tab.text = tabTitle[position]
             }.attach()
-//            activityMainBinding.tabLayout.setupWithViewPager(activityMainBinding.viewPager)
             activityMainBinding.tabLayout.getTabAt(0)?.text = "TRACKS"
             activityMainBinding.tabLayout.getTabAt(1)?.text = "ALBUMS"
             activityMainBinding.tabLayout.getTabAt(2)?.text = "ARTISTS"
@@ -284,10 +267,6 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             drawable.setSize(2, 1)
             linearLayout.dividerPadding = 45
             linearLayout.dividerDrawable = drawable
-//            filter = IntentFilter()
-//            filter?.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
-//            filter?.addAction(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT.toString())
-//            registerReceiver(mNoisyReceive, filter)
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -305,6 +284,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             null, null)
 
         runOnUiThread(object : Runnable {
+            @SuppressLint("Range")
             override fun run() {
                 if (c!!.moveToFirst() && c.moveToFirst()) {
                     do {
@@ -776,16 +756,6 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         super.onStart()
     }
 
-    @Subscribe
-    fun onEvent(status: String) {
-        when (status) {
-//            PlaybackStatus.LOADING -> {
-//            }
-//            PlaybackStatus.ERROR -> Toast.makeText(this, R.string.no_stream, Toast.LENGTH_SHORT).show()
-        }
-//        trigger.setImageResource(if (status == PlaybackStatus.PLAYING) R.drawable.ic_pause_black else R.drawable.ic_play_arrow_black)
-    }
-
     @SuppressLint("WrongConstant")
     override fun onBackPressed() {
 
@@ -868,7 +838,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
     }
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    override fun update(o: Observable?, arg: Any?) {
+     fun update(arg:View) {
         if (arg is View) {
             when (arg.id) {
                 R.id.imvForward -> songForward()
@@ -927,55 +897,5 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         }
 
     }
-
-//    fun StringUtilitys(string1: String): String {
-//
-//        var string: String = string1
-//        val PREF_APPID: String = "radio"
-//        val BLANK_MESSAGE: String = ""
-//        var REMOVE_LIST = arrayOf("www.songs.pk", "www.", ".com", ".pl", ".pk", ".org", ".co.in", "~requested~", "(musictub)", ".mp3", EnvironmentCompat.MEDIA_UNKNOWN, "()", "\\[\\]")
-//        var REPLACE_LIST: Array<Array<String>>? = null
-//        var r0 = arrayOfNulls<Array<String>>(6)
-//        r0[0] = arrayOf<String>("247", "24x7")
-//        r0[1] = arrayOf<String>(PREF_APPID, "radio")
-//        r0[2] = arrayOf<String>(" ", " ")
-//        r0[3] = arrayOf<String>("- -", "-")
-//        r0[4] = arrayOf<String>(" ", " ")
-//        r0[5] = arrayOf<String>("[^a-zA-Z0-9 ()\\[\\],-]", BLANK_MESSAGE)
-//        REPLACE_LIST = r0.filterNotNull().toTypedArray()
-//
-//        if (string == null) {
-//            return string
-//        }
-//
-//        string = string.toLowerCase(Locale.getDefault())
-//        for (removeString in REMOVE_LIST) {
-//            string = string.replace(removeString, BLANK_MESSAGE)
-//        }
-//        for (replaceString in REPLACE_LIST!!) {
-//            string = string.replace(replaceString[0], replaceString[1])
-//        }
-////        return toTitleCase(
-//        return string.trim()
-////        )
-//    }
-//
-//
-//    private fun toTitleCase(input: String): String {
-//        val titleCase = StringBuilder()
-//        var nextTitleCase = true
-//        for (c in input.toCharArray()) {
-//            var c2: Char
-//            if (Character.isSpaceChar(c2) || c2.toString() == "(" || "[" == c2.toString()) {
-//                nextTitleCase = true
-//            } else if (nextTitleCase) {
-//                c2 = Character.toTitleCase(c2)
-//                nextTitleCase = false
-//            }
-//            titleCase.append(c2)
-//        }
-//        return titleCase.toString()
-//    }
-
 
 }
