@@ -10,8 +10,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.trickyandroid.playmusic.service.Mp3PlayerService
 
-
-
 class MainViewModel : ViewModel(), LifecycleObserver {
 
     companion object {
@@ -39,8 +37,6 @@ class MainViewModel : ViewModel(), LifecycleObserver {
 
     init {
     }
-
-
 
     fun getIsSeekBarUdpating(): LiveData<Boolean> = isSeekBarUpdating
 

@@ -15,10 +15,7 @@ import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.RingtoneManager
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
-import android.os.PersistableBundle
+import android.os.*
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.*
@@ -36,8 +33,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import com.trickyandroid.playmusic.databinding.ActivitySongPlayerBinding
+import com.trickyandroid.playmusic.viewmodel.MainViewModel
 import com.trickyandroid.playmusic.viewmodel.SongPlayerViewModel
+import com.trickyandroid.playmusic.viewmodel.ViewModelFactory
 
 class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Observer,
     LifecycleOwner {
@@ -45,6 +45,14 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
     val viewModel = SongPlayerViewModel()
 
     companion object {
+        var handler: Handler = Handler()
+        var runnable: Runnable? = null
+        var mainViewModel:MainViewModel?=null
+
+        fun updateProgressBar() {
+            handler.postDelayed(runnable!!, 100)
+        }
+
         var mmr: MediaMetadataRetriever = MediaMetadataRetriever()
 
         @SuppressLint("StaticFieldLeak")
@@ -128,6 +136,7 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainViewModel=ViewModelProvider(this, ViewModelFactory.getInstance())[MainViewModel::class.java]
         activitySongPlayerBinding = DataBindingUtil.setContentView(this, R.layout.activity_song_player)
         activitySongPlayerBinding!!.viewModel = viewModel
         viewModel.addObserver(this)
@@ -140,70 +149,17 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         }
         initialize()
         songDetails(MainActivity.currentSongIndex)
-        MainActivity.mUpdateTimeTask = object : Runnable {
-            override fun run() {
-                try {
-
-                    val totalDuration = MainActivity.exoPlayer?.duration!!.toLong()
-                    val currentDuration = MainActivity.exoPlayer?.currentPosition!!.toLong()
-
-                    //                    // Displaying Total Duration time
-                    //                    SongPlayerActivity.songTotalDurationLabel.setText("" + SongPlayerActivity.utils.milliSecondsToTimer(totalDuration));
-                    //
-                    //                    // Displaying time completed playing
-                    //                    SongPlayerActivity.songCurrentDurationLabel.setText("" + SongPlayerActivity.utils.milliSecondsToTimer(currentDuration));
-
-                    // Updating progress bar
-                    val progress = MainActivity.utils?.getProgressPercentage(currentDuration, totalDuration)
-
-                    activitySongPlayerBinding!!.songSeekBar.progress = progress!!
-                    // Running this thread after 100 milliseconds
-                    MainActivity.mHandler.postDelayed(this, 100)
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-            }
-        }
+        initSeekbarRunnable()
         activitySongPlayerBinding!!.songSeekBar.setOnSeekBarChangeListener(this)
     }
 
-    fun initialize(): Unit {
+    fun initialize(){
         MainActivity.songCurrentDurationLabel = findViewById<TextView>(R.id.tvCurrentTime) as TextView
         MainActivity.songTotalDurationLabel = findViewById<TextView>(R.id.tvTotalTime) as TextView
         context = this
         utils = Utilities()
         activitySongPlayerBinding!!.tvSongName.isSelected = true
     }
-
-
-    override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-    }
-
-    override fun onStartTrackingTouch(seekBar: SeekBar) {
-        MainActivity.mHandler.removeCallbacks(MainActivity.mUpdateTimeTask)
-    }
-
-    override fun onStopTrackingTouch(seekBar: SeekBar) {
-        try {
-
-            MainActivity.mHandler.removeCallbacks(MainActivity.mUpdateTimeTask)
-            val totalDuration = MainActivity.exoPlayer?.duration
-            val currentPosition = MainActivity.utils?.progressToTimer(seekBar.progress, totalDuration!!.toInt())
-
-            // forward or backward to certain seconds
-            MainActivity.exoPlayer?.seekTo(currentPosition!!.toLong())
-
-            // update timer progress again
-            MainActivity.updateProgressBar()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -476,4 +432,66 @@ class SongPlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener,
         AppController.songPlayerActivity=null
         super.onDestroy()
     }
+
+
+    override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar) {
+//        MainActivity.mHandler.removeCallbacks(MainActivity.mUpdateTimeTask)
+//        handler.removeCallbacks(runnable!!)
+//        updateProgressBar()
+    }
+
+    override fun onStopTrackingTouch(seekBar: SeekBar) {
+        try {
+
+           handler.removeCallbacks(runnable!!)
+            val totalDuration = MainActivity.exoPlayer?.duration!!.toInt()
+            val currentPosition = utils?.progressToTimer(seekBar.progress, totalDuration)!!
+
+            MainActivity.mp3Playerservice?.setProgress(currentPosition.toLong())
+
+            updateProgressBar()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    fun initSeekbarRunnable()
+    {
+        runnable = object : Runnable {
+            override fun run() {
+                try {
+                    if (mainViewModel?.getBindingsUdpating()?.value != null) {
+                        val totalDuration =
+                            mainViewModel!!.getBindingsUdpating().value?.getService()!!.getExoplayer().duration.toLong()
+                        val currentDuration =
+                            mainViewModel!!.getBindingsUdpating().value?.getService()!!.getExoplayer().currentPosition
+                        // Displaying Total Duration time
+                        activitySongPlayerBinding!!.tvTotalTime.text =
+                            " ${MainActivity.utils?.milliSecondsToTimer(totalDuration)}"
+
+                        // Displaying time completed playing
+                        activitySongPlayerBinding!!.tvCurrentTime.text =
+                            " ${MainActivity.utils?.milliSecondsToTimer(currentDuration)}"
+
+                        activitySongPlayerBinding!!.songSeekBar.progress =
+                            mainViewModel!!.getBindingsUdpating().value?.getService()!!.getProgress()
+
+                        //Running this thread after 100 milliseconds
+                        handler.postDelayed(this, 100)
+
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        handler.postDelayed(runnable!!, 100)
+
+
+    }
+
 }
