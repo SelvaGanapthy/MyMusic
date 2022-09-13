@@ -12,6 +12,7 @@ import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Binder
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
@@ -20,6 +21,7 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.google.android.exoplayer2.*
@@ -49,6 +51,8 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
     internal var appContext: Context? = null
     private var status: String? = null
     private var _iCallBack: ICallBack? = null
+    var progress: Int? = null
+    var mHandler: Handler? = null
 
     //    Exo
     private var wifiLock: WifiManager.WifiLock? = null
@@ -58,7 +62,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
     private var mediaSession: MediaSessionCompat? = null
     private var transportControls: MediaControllerCompat.TransportControls? = null
     private val BANDWIDTHMETER: DefaultBandwidthMeter = DefaultBandwidthMeter()
-   private var exoPlayer: ExoPlayer? = null
+    private var exoPlayer: ExoPlayer? = null
 
     inner class LocalBinder : Binder() {
         fun getService(): Mp3PlayerService = this@Mp3PlayerService
@@ -145,6 +149,7 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
     @SuppressLint("RestrictedApi")
     override fun onCreate() {
         super.onCreate()
+        mHandler = Handler()
         onGoingCall = false
         _iCallBack = this@Mp3PlayerService
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -388,9 +393,9 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
 
             MainActivity.activityMainBinding.imvSongImage.setImageURI(Uri.parse(MainActivity.SongsInfoList[songIndex].getSongImgPath()))
 //          MainActivity.imvSongImage?.setImageURI(Uri.parse(MainActivity.SongsInfoList.get(songIndex).getSongImgPath()))
-            MainActivity.activityMainBinding.songSeekBar.progress=0
-            MainActivity.activityMainBinding.songSeekBar.max=100
-            MainActivity.updateProgressBar()
+//            MainActivity.activityMainBinding.songSeekBar.progress=0
+//            MainActivity.activityMainBinding.songSeekBar.max=100
+//            MainActivity.updateProgressBar()
             this.path = MainActivity.SongsInfoList[songIndex].getSongPath()
             SongPlayerActivity.songDetails(songIndex)
             notificationManagers?.startNotify(Constants.PLAYING)
@@ -599,5 +604,44 @@ class Mp3PlayerService : Service(), AudioManager.OnAudioFocusChangeListener, Pla
                 MainActivity.currentSongIndex = currentSongIndex
             }
         }
+    }
+
+    fun startPretendLongRunningTask() {
+        val mUpdateTimeTask: Runnable = object : Runnable {
+            override fun run() {
+                try {
+                    val totalDuration = exoPlayer?.duration!!.toLong()
+                    val currentDuration = exoPlayer!!.currentPosition
+
+                    // Updating progress bar
+                    progress = MainActivity.utils?.getProgressPercentage(currentDuration, totalDuration)
+
+                    //Log.d("Progress", ""+progress);
+                    //    MainActivity.activityMainBinding.songSeekBar.progress = progress!!
+                    Log.i("@@", progress.toString())
+                    // Running this thread after 100 milliseconds
+                    mHandler!!.postDelayed(this, 100)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        mHandler!!.postDelayed(mUpdateTimeTask, 100)
+    }
+
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        stopSelf()
+    }
+
+    fun getProgress(): Int = progress!!
+    fun getExoplayer():ExoPlayer=exoPlayer!!
+    fun setProgress(value: Long) {
+        val totalDuration = exoPlayer?.duration!!.toLong()
+        val currentDuration = value
+        exoPlayer!!.seekTo(currentDuration)
+        // Updating progress bar
+        progress = MainActivity.utils?.getProgressPercentage(currentDuration, totalDuration)
     }
 }

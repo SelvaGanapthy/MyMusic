@@ -14,6 +14,7 @@ import android.os.Handler
 import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -27,6 +28,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -51,6 +53,7 @@ import com.trickyandroid.playmusic.view.fragement.TracksTab
 import com.trickyandroid.playmusic.view.interfaces.IFragmentListener
 import com.trickyandroid.playmusic.view.interfaces.ISearch
 import com.trickyandroid.playmusic.viewmodel.MainViewModel
+import com.trickyandroid.playmusic.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
@@ -62,7 +65,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFragmentListener,
     LifecycleOwner, CommonSearchFragment.CommonRightMenuFragmentListener {
 
-    internal var viewModel: MainViewModel = MainViewModel()
+    lateinit var viewModel: MainViewModel
     internal var iSearch: ArrayList<ISearch> = ArrayList()
     var filter: IntentFilter? = null
     var AlbumsList: ArrayList<SongInfoModel> = ArrayList()
@@ -71,6 +74,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
     var searchText: String? = null
     private var mFragmentManager: FragmentManager? = null
     private var mFragmentTransaction: FragmentTransaction? = null
+    var TAG: String = "MainActivity"
 
     /*Fragment*/
     var adapter1: FragmentAdapter? = null
@@ -90,6 +94,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         var currentSongIndex = 0
         var utils: Utilities? = null
         var mHandler: Handler = Handler()
+        var mp3Playerservice: Mp3PlayerService? = null
         var activeTabPos = 0
 
         @SuppressLint("StaticFieldLeak")
@@ -100,6 +105,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         public var songTotalDurationLabel: TextView? = null
         var isShuffle = false
         var isRepeat = false
+        var mUpdateTimeTasks: Runnable? = null
 
         @SuppressLint("StaticFieldLeak")
         var context: Context? = null
@@ -107,45 +113,11 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         val BLANK_MESSAGE = ""
 
         fun updateProgressBar(): Unit {
-            mHandler.postDelayed(mUpdateTimeTask, 100)
+            mHandler.postDelayed(mUpdateTimeTasks!!, 100)
         }
 
         @SuppressLint("StaticFieldLeak")
         var isFmPlay: Boolean = false
-
-        internal var mUpdateTimeTask: Runnable = object : Runnable {
-            override fun run() {
-                try {
-
-                    val totalDuration = exoPlayer?.duration!!.toLong()
-                    val currentDuration = exoPlayer!!.currentPosition
-                    // Displaying Total Duration time
-                    songTotalDurationLabel?.text = " ${utils?.milliSecondsToTimer(totalDuration)}"
-
-                    // Displaying time completed playing
-                    songCurrentDurationLabel?.text =
-                        " ${utils?.milliSecondsToTimer(currentDuration)}"
-
-                    //
-                    //                // Displaying Total Duration time
-                    //                SongPlayerActivity.songTotalDurationLabel.setText("" + MainActivity.utils.milliSecondsToTimer(totalDuration));
-                    //
-                    //                // Displaying time completed playing
-                    //                SongPlayerActivity.songCurrentDurationLabel.setText("" + MainActivity.utils.milliSecondsToTimer(currentDuration));
-
-                    // Updating progress bar
-                    val progress = utils?.getProgressPercentage(currentDuration, totalDuration)
-
-                    //Log.d("Progress", ""+progress);
-                    activityMainBinding.songSeekBar.progress = progress!!
-
-                    // Running this thread after 100 milliseconds
-                    mHandler.postDelayed(this, 100)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
 
         fun getAlbumArt(uri: String): ByteArray? {
             val retriever = MediaMetadataRetriever()
@@ -173,9 +145,10 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         super.onCreate(savedInstanceState)
         /*DataBinding*/
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        activityMainBinding.viewModel = viewModel
+        viewModel = ViewModelProvider(this, ViewModelFactory.getInstance())[MainViewModel::class.java]
+//        activityMainBinding.viewModel = viewModel
 //        viewModel.addObserver(this)
-        lifecycle.addObserver(viewModel)
+//        lifecycle.addObserver(viewModel)
 
         AppController.mainActivity = this
         context = this
@@ -267,6 +240,83 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             drawable.setSize(2, 1)
             linearLayout.dividerPadding = 45
             linearLayout.dividerDrawable = drawable
+
+            viewModel.getBindingsUdpating().observe(this, androidx.lifecycle.Observer {
+                mp3Playerservice = if (it != null) {
+                   // Log.d(TAG, "onChanged:Connected to service")
+                    it.getService()
+
+                } else {
+                    //Log.d(TAG, "onChanged: unbound from service")
+                    null
+                }
+
+                if (mp3Playerservice != null) {
+                    // Updating progress bar & UI
+                    mp3Playerservice!!.startPretendLongRunningTask()
+                    viewModel.setIsUpdateSeekbar(true)
+                }
+            })
+
+            viewModel.getIsSeekBarUdpating().observe(this, androidx.lifecycle.Observer {
+
+                mUpdateTimeTasks = object : Runnable {
+                    override fun run() {
+                        try {
+
+                            if (it) {
+                                if (viewModel.getBindingsUdpating().value != null) {
+
+                                    val totalDuration =
+                                        mp3Playerservice?.getExoplayer()?.duration!!.toLong()
+                                    val currentDuration =
+                                        mp3Playerservice?.getExoplayer()?.currentPosition
+                                    // Displaying Total Duration time
+                                    songTotalDurationLabel?.text =
+                                        " ${utils?.milliSecondsToTimer(totalDuration)}"
+
+                                    // Displaying time completed playing
+                                    songCurrentDurationLabel?.text =
+                                        " ${utils?.milliSecondsToTimer(currentDuration!!)}"
+
+                                    activityMainBinding.songSeekBar.progress =
+                                        mp3Playerservice?.getProgress()!!
+
+                                    //Running this thread after 100 milliseconds
+                                    mHandler.postDelayed(this, 100)
+
+                                }
+                            }
+
+
+//                            // Displaying Total Duration time
+//                            songTotalDurationLabel?.text =
+//                                " ${utils?.milliSecondsToTimer(totalDuration)}"
+//
+//                            // Displaying time completed playing
+//                            songCurrentDurationLabel?.text =
+//                                " ${utils?.milliSecondsToTimer(currentDuration)}"
+//                            mp3Playerservice?.getProgress()
+////                             Updating progress bar
+//                            val progress =
+//                                utils?.getProgressPercentage(currentDuration, totalDuration)
+//
+//                            //Log.d("Progress", ""+progress);
+//                            activityMainBinding.songSeekBar.progress = progress!!
+//
+////                             Running this thread after 100 milliseconds
+//                            mHandler.postDelayed(this, 100)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+
+                if (it)
+                    mHandler.postDelayed(mUpdateTimeTasks!!, 100)
+
+            })
+
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -437,8 +487,6 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             SongPlayerActivity.songDetails(index)
             AppController.albumSongActivity?.songDetails(index)
 
-            // Updating progress bar & UI
-            updateProgressBar()
             activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
             activityMainBinding.tvSongName.text = "${SongsInfoList[index].getSongName()} Song ."
             activityMainBinding.tvMovieName.text =
@@ -452,9 +500,13 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             intent.putExtra("movieName", SongsInfoList[currentSongIndex].getSongMoviename())
             intent.putExtra("songPath", SongsInfoList[index].getSongPath())
             startService(intent)
+            // BindService called for update seekBar
+            bindService()
 
             AppController.songPlayerActivity?.initTotalTime()
             songTotalDurationLabel?.text = SongsInfoList[currentSongIndex].getSongTime()
+
+            mUpdateTimeTasks?.let { updateProgressBar() }
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -521,6 +573,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             var intent: Intent
             if (exoPlayer?.playWhenReady!!) {
                 exoPlayer?.playWhenReady = false
+                viewModel.setIsUpdateSeekbar(false)
                 activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 AppController.albumSongActivity?.imvPlayrPause?.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 try {
@@ -544,6 +597,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
             } else {
 
                 exoPlayer?.playWhenReady = true
+                viewModel.setIsUpdateSeekbar(true)
                 activityMainBinding.imvPlayrPause.setImageResource(R.drawable.ic_pause_black_24dp)
                 AppController.albumSongActivity?.imvPlayrPause?.setImageResource(R.drawable.ic_pause_black_24dp)
                 try {
@@ -715,7 +769,7 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
                 if (!SongsInfoList.isEmpty()) {
                     intent =
                         Intent(this@MainActivity.applicationContext, Mp3PlayerService::class.java)
-                    intent.putExtra("songTitle", SongsInfoList.get(currentSongIndex).getSongName())
+                    intent.putExtra("songTitle", SongsInfoList[currentSongIndex].getSongName())
                     intent.putExtra("movieName", SongsInfoList[currentSongIndex].getSongMoviename())
                     intent.putExtra("songPath", SongsInfoList[currentSongIndex].getSongImgPath())
                     this@MainActivity.startService(intent)
@@ -727,33 +781,19 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         }
     }
 
-
-    override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-    }
-
-    override fun onStartTrackingTouch(p0: SeekBar?) = mHandler.removeCallbacks(mUpdateTimeTask)
-
-
-    override fun onStopTrackingTouch(seekBar: SeekBar?) {
-        try {
-            mHandler.removeCallbacks(mUpdateTimeTask)
-            val totalDuration = exoPlayer?.duration!!.toInt()
-            val currentPosition = utils?.progressToTimer(seekBar?.progress!!, totalDuration)!!
-
-            // forward or backward to certain seconds
-           exoPlayer!!.seekTo(currentPosition.toLong())
-            // update timer progress again
-           updateProgressBar()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-
     override fun onStart() {
         EventBus.getDefault().register(this)
         super.onStart()
+    }
+
+    @Subscribe
+    fun onEvent(status: String) {
+        when (status) {
+//            PlaybackStatus.LOADING -> {
+//            }
+//            PlaybackStatus.ERROR -> Toast.makeText(this, R.string.no_stream, Toast.LENGTH_SHORT).show()
+        }
+//        trigger.setImageResource(if (status == PlaybackStatus.PLAYING) R.drawable.ic_pause_black else R.drawable.ic_play_arrow_black)
     }
 
     @SuppressLint("WrongConstant")
@@ -809,6 +849,11 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
 
     override fun onResume() {
         super.onResume()
+    }
+
+    private fun bindService() {
+        val serviceIntent = Intent(this, Mp3PlayerService::class.java)
+        bindService(serviceIntent, viewModel.serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onSaveInstanceState(oldInstanceState: Bundle) {
@@ -897,5 +942,32 @@ class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, IFrag
         }
 
     }
+
+    override fun onProgressChanged(seekBar: SeekBar, p1: Int, b: Boolean) {
+    }
+
+    override fun onStartTrackingTouch(p0: SeekBar?) {
+        mHandler.removeCallbacks(mUpdateTimeTasks!!)
+        updateProgressBar()
+    }
+
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        try {
+        mHandler.removeCallbacks(mUpdateTimeTasks!!)
+        val totalDuration = exoPlayer?.duration!!.toInt()
+        val currentPosition = utils?.progressToTimer(seekBar?.progress!!, totalDuration)!!
+
+        mp3Playerservice?.setProgress(currentPosition.toLong())
+            // forward or backward to certain seconds
+           // exoPlayer!!.seekTo(currentPosition.toLong())
+            // update timer progress again
+        updateProgressBar()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
 }

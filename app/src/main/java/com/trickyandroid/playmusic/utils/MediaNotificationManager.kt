@@ -94,32 +94,37 @@ class MediaNotificationManager constructor(val service: Mp3PlayerService) {
         val pendingIntent = PendingIntent.getActivity(service, 0, i,  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationView = RemoteViews(service.packageName, R.layout.notificationbig_mediacontroller)
         notificationManager!!.cancel(NOTIFICATIONID)
-        mediaSessionCompat =  MediaSessionCompat(service, "tag")
+        service.stopForeground(true)
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val manager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            mediaSessionCompat =  MediaSessionCompat(service, "tag")
-            mediaSessionCompat?.isActive=true
-//        mediaSessionCompat?.
-//            /* Below coding for above android 12 notification specify
-            mediaSessionCompat?.setMetadata(
-                 MediaMetadataCompat.Builder()
-                    .putString(MediaMetadata.METADATA_KEY_TITLE,songName)
-                    .putString(MediaMetadata.METADATA_KEY_ARTIST,movieName)
-                    .build()
-            )
-//            val channel = NotificationChannel(PRIMARYCHANNEL, PRIMARYCHANNELNAME, NotificationManager.IMPORTANCE_HIGH)
-//            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-////               channel.importance=
-//            }
-//
-////            manager.createNotificationChannel(channel)
-//        }
+        mediaSessionCompat =  MediaSessionCompat(service,service.packageName)
+        mediaSessionCompat?.isActive=true
+        mediaSessionCompat?.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+
+        /* Below coding for above android 12 notification specify*/
+        mediaSessionCompat?.setMetadata(
+            MediaMetadataCompat.Builder()
+                .putString(MediaMetadata.METADATA_KEY_TITLE,songName)
+                .putString(MediaMetadata.METADATA_KEY_ARTIST,movieName)
+                .build()
+        )
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val manager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(PRIMARYCHANNEL, PRIMARYCHANNELNAME, NotificationManager.IMPORTANCE_DEFAULT)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+               channel.importance=NotificationManager.IMPORTANCE_DEFAULT
+                channel.lockscreenVisibility=Notification.VISIBILITY_PRIVATE
+            }
+            manager.createNotificationChannel(channel)
+        }
 
         val builder: NotificationCompat.Builder =
             NotificationCompat.Builder(service, PRIMARYCHANNEL)
                 .setAutoCancel(false)
+//                .setCategory(Notification.CATEGORY_PROMO)
+//                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentTitle(songName)
                 .setContentText(movieName)
                 .setLargeIcon(bitmap)

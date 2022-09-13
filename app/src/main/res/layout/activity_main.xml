@@ -115,16 +115,17 @@
                 android:background="#ff00"
                 android:onClick="update"
                 android:orientation="vertical"
-                android:padding="1dp">
+                android:padding="0dp">
 
                 <androidx.appcompat.widget.AppCompatSeekBar
                     android:id="@+id/songSeekBar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:visibility="gone" />
+                    android:layout_height="1.3dp"
+                    android:progressTint="#FFF"
+                    android:thumbTint="#FFF"
+                    android:layout_marginBottom="2dp"
+                     />
 
                 <LinearLayout
                     android:layout_width="match_parent"
